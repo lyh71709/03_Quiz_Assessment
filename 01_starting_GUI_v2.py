@@ -4,8 +4,17 @@ from turtle import screensize
 from PIL import ImageTk,Image,ImageFilter
 
 
-class Start:
+class Game:
     def __init__(self, parent):
+
+        self.starting_frame = Frame(padx=600, pady=80, background="white")
+        self.starting_frame.grid()
+
+
+
+
+
+        
 
         # Setup my karmatic arcade font
         Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
@@ -13,8 +22,7 @@ class Start:
 
         logo = ImageTk.PhotoImage(Image.open("pokeball_icon.png"))
         
-        self.starting_frame = Frame(padx=600, pady=80, background="white")
-        self.starting_frame.grid()
+        
 
         self.heading_label = Label(self.starting_frame, font=Karmatic_Arcade_heading, text="Who's That Pokemon?", background="white", justify=CENTER)
         self.heading_label.grid(row=0)
@@ -40,25 +48,7 @@ class Start:
     
         
     def to_difficuty_select(self):
-        root.withdraw()
-        Difficulty(self)
-
-class Difficulty:
-    def __init__(self, partner):
-
-        self.difficulty_box = Toplevel()
-        # If users press cross at top, close program
-        self.difficulty_box.protocol('WM_DELETE_WINDOW', partner.quit_game)
-        self.difficulty_box.state("zoomed")
-
-        self.difficulty_frame = Frame(self.difficulty_box, padx=600, pady=80, background="white")
-        self.difficulty_frame.grid()
-
-        self.heading_label = Label(self.difficulty_frame, font="arial 12 bold", text="Who's That Pokemon?", background="white", justify=CENTER)
-        self.heading_label.grid(row=0)
-
-
-
+        
 
 # main routine
 if __name__ == "__main__":
