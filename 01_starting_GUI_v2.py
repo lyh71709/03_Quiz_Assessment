@@ -13,7 +13,7 @@ class Game:
         Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
         Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 
-        logo = ImageTk.PhotoImage(Image.open("pokeball_icon.png"))
+        pokeball_icon = ImageTk.PhotoImage(Image.open("pokeball_icon.gif"))
 
         # Setup Frames
         self.starting_frame = Frame(width=root.winfo_screenwidth(), height=root.winfo_screenheight(), bg="blue")
@@ -28,8 +28,8 @@ class Game:
         self.heading_label = Label(self.starting_frame, font=Karmatic_Arcade_heading, text="Who's That Pokemon?", background="white", justify=CENTER)
         self.heading_label.grid(row=0)
         
-        self.pokemon_logo = Label(self.starting_frame, width = 500, height=500, image=logo, background="white")
-        self.pokemon_logo.logo = logo
+        self.pokemon_logo = Label(self.starting_frame, width = 500, height=500, image=pokeball_icon, background="white")
+        self.pokemon_logo.logo = pokeball_icon
         self.pokemon_logo.grid(row=1, pady=50)
 
         self.starting_button_frame = Frame(self.starting_frame, pady=50, background="white")

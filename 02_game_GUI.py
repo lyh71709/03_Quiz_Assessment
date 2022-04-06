@@ -38,6 +38,10 @@ help_frame = Frame(pady=30, bg="white")
 help_frame.grid(row=1, column=0, sticky="news")
 help_frame.place(anchor="c", relx=.5, rely=0.6)
 
+help_frame = Frame(pady=30, bg="white")
+help_frame.grid(row=1, column=0, sticky="news")
+help_frame.place(anchor="c", relx=.5, rely=0.6)
+
 raise_frame(heading_frame)
 raise_frame(starting_frame)
 
@@ -81,7 +85,11 @@ normal_button.grid(row=1, column=0, padx=25, pady=5)
 
 master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, command=quit_game)
 master_button.grid(row=1, column=1, padx=25, pady=5)
+
 #endregion
+
+#region Quiz Frame
+
 
 #region Help Frame
 frame_set_size = Label(help_frame, width=(root.winfo_screenwidth()), bg="white")
