@@ -1,19 +1,23 @@
-#Import the required libraries
+
+# Import Module
 from tkinter import *
-
-#Create an instance of tkinter frame
-win= Tk()
-
-#Set the geometry of frame
-win.geometry("650x250")
-win.state('zoomed')
-
-#Get the current screen width and height
-screen_width = win.winfo_screenwidth()
-screen_height = win.winfo_screenheight()
-
-#Print the screen size
-print("Screen width:", screen_width)
-print("Screen height:", screen_height)
-
-win.mainloop()
+from PIL import Image, ImageTk
+ 
+# Create Tkinter Object
+root = Tk()
+ 
+# Read the Image
+image = Image.open("Image File Path")
+ 
+# Resize the image using resize() method
+resize_image = image.resize((width, height))
+ 
+img = ImageTk.PhotoImage(resize_image)
+ 
+# create label and add resize image
+label1 = Label(image=img)
+label1.image = img
+label1.pack()
+ 
+# Execute Tkinter
+root.mainloop()
