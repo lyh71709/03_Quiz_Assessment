@@ -22,7 +22,7 @@ normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 question_picture = Image.open("images/charizard.gif")
 # Resize the image using resize() method
-resized_image = question_picture.resize((400, 400))
+resized_image = question_picture.resize((600, 600))
 question_picture = ImageTk.PhotoImage(resized_image)
 
 # Setup Frames
@@ -43,12 +43,29 @@ heading_label.grid(row=0)
 #endregion
 
 #region Quiz Frame
-stats_label = Label(quiz_frame, text="Score - 15 \n Lives - 3\n Question No. - 10", font=Karmatic_Arcade_text, bg="white")
-stats_label.grid(row=0, pady=10)
+question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
+question_num_label.grid(row=0, column=0, pady=10)
 
-question = Label(quiz_frame, width=400, height=400, image=question_picture, background="white")
-question.grid(row=1, pady=50)
+stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
+stats_label.grid(row=0, column=1, padx=10, pady=10)
 
+question = Label(quiz_frame, width=600, height=600, image=question_picture, background="black")
+question.grid(row=1, column=0, pady=50, padx=30)
+
+answer_button_frame = Frame(quiz_frame, background="red")
+answer_button_frame.grid(row=1, column=1, pady=50, padx=50)
+
+answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+answer_a_button.grid(row=0, column=0, pady=20, padx=20)
+
+answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+answer_b_button.grid(row=0, column=1, pady=20, padx=20)
+
+answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+answer_c_button.grid(row=1, column=0, pady=20, padx=20)
+
+answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
 #endregion
 
