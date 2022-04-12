@@ -11,6 +11,15 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
+def answer_question(button_pressed, correct_button):
+
+    if button_pressed == correct_button:
+        print("correct")
+        button_pressed.config(bg="green")
+    else:
+        print("incorrect")
+        button_pressed.config(bg="red")
+
 # Setup my karmatic arcade font
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 60, weight = "bold")
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 40, weight = "bold")
@@ -20,7 +29,7 @@ Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, 
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-question_picture = Image.open("images/charizard.gif")
+question_picture = Image.open("images/snorlax.png")
 # Resize the image using resize() method
 resized_image = question_picture.resize((600, 600))
 question_picture = ImageTk.PhotoImage(resized_image)
@@ -30,7 +39,7 @@ heading_frame = Frame(bg="white")
 heading_frame.grid(row=0, pady=10, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
-quiz_frame = Frame(pady=30, bg="red")
+quiz_frame = Frame(pady=30, bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
 quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
@@ -53,7 +62,7 @@ question = Label(quiz_frame, width=600, height=600, image=question_picture, back
 question.grid(row=1, column=0, pady=50, padx=30)
 
 answer_button_frame = Frame(quiz_frame, background="red")
-answer_button_frame.grid(row=1, column=1, pady=50, padx=50)
+answer_button_frame.grid(row=1, column=1, pady=30, padx=50)
 
 answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
 answer_a_button.grid(row=0, column=0, pady=20, padx=20)
@@ -66,6 +75,11 @@ answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
 answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
 answer_d_button.grid(row=1, column=1, pady=20, padx=20)
+
+answer_a_button.config(command=lambda: answer_question(answer_a_button, answer_a_button))
+answer_b_button.config(command=lambda: answer_question(answer_b_button, answer_a_button))
+answer_c_button.config(command=lambda: answer_question(answer_c_button, answer_a_button))
+answer_d_button.config(command=lambda :answer_question(answer_d_button, answer_a_button))
 
 #endregion
 
