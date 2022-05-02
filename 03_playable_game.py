@@ -8,6 +8,22 @@ import random
 
 def setup_game():
 
+    def generate_question():
+        buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
+        question = random.choice(pokemon_list)
+        question_picture = Image.open("images/{}.png".format(question))
+        resized_image = question_picture.resize((600, 600))
+        question_picture = ImageTk.PhotoImage(resized_image)
+
+        question_label.config(image=question_picture)
+
+        for i in buttons:
+            i.config(text="{}".format(random.choice(pokemon_list)).title())
+
+        answer_button = random.choice(buttons)
+        answer_button.config(text=question.title())
+        raise_frame(quiz_frame)
+
     dataset = open("pokemon.csv")
     csvreader = csv.reader(dataset)
     pokemon_list = dataset.readlines()
@@ -39,26 +55,8 @@ def setup_game():
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
     #endregion
 
-    def generate_question():
-        buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
-        question = random.choice(pokemon_list)
-        question_picture = Image.open("images/{}.png".format(question))
-        resized_image = question_picture.resize((600, 600))
-        question_picture = ImageTk.PhotoImage(resized_image)
-
-        question_label.config(image=question_picture)
-
-        for i in buttons:
-            i.config(text="{}".format(random.choice(pokemon_list)).title())
-
-        answer_button = random.choice(buttons)
-        answer_button.config(text=question.title())
-        raise_frame(quiz_frame)
-    
     generate_question()
-
     
-
 root = Tk()
 
 #region Variables
