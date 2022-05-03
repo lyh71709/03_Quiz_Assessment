@@ -12,7 +12,7 @@ def setup_game():
         buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
         question = random.choice(pokemon_list)
         question_picture = Image.open("images/{}.png".format(question))
-        resized_image = question_picture.resize((600, 600))
+        resized_image = question_picture.resize((1000, 1000))
         question_picture = ImageTk.PhotoImage(resized_image)
 
         question_label.config(image=question_picture)
@@ -38,7 +38,7 @@ def setup_game():
     stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10, pady=10)
 
-    question_label = Label(quiz_frame, width=475, height=475, image=test, background="#a9cad4")
+    question_label = Label(quiz_frame, width=475, height=475, image="", background="#a9cad4")
     question_label.grid(row=1, column=0, pady=50, padx=30)
 
     answer_button_frame = Frame(quiz_frame)
