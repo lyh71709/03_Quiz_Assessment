@@ -9,5 +9,10 @@ import csv
 
 with open('pokemon.csv') as file:
     content = file.readlines()
-pokemon_list = content[1:]
+
+pokemon_list = []
+for i in content:
+    pokemon_list.append(i.strip())
+
+
 print(pokemon_list)

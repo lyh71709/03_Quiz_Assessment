@@ -21,13 +21,15 @@ def setup_game():
             i.config(text="{}".format(random.choice(pokemon_list)).title())
 
         answer_button = random.choice(buttons)
-        answer_button.config(text=question.title())
+        answer_button.config(text=question.title(), bg="red")
         raise_frame(quiz_frame)
 
-    dataset = open("pokemon.csv")
-    csvreader = csv.reader(dataset)
-    pokemon_list = dataset.readlines()
-    dataset.close()
+    with open('pokemon.csv') as file:
+        content = file.readlines()
+
+    pokemon_list = []
+    for i in content:
+        pokemon_list.append(i.strip())
     
     #region Quiz Frame
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
