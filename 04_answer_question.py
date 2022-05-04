@@ -4,7 +4,32 @@ from turtle import screensize
 from PIL import Image, ImageTk,  ImageFilter
 import csv
 import time
+import datetime
 import random
+
+# Create class that acts as a countdown
+def countdown(h, m, s):
+ 
+    # Calculate the total number of seconds
+    total_seconds = h * 3600 + m * 60 + s
+ 
+    # While loop that checks if total_seconds reaches zero
+    # If not zero, decrement total time by one second
+    while total_seconds > 0:
+ 
+        # Timer represents time left on countdown
+        timer = datetime.timedelta(seconds = total_seconds)
+        
+        # Prints the time left on the timer
+        print(timer, end="\r")
+ 
+        # Delays the program one second
+        time.sleep(1)
+ 
+        # Reduces total time by one second
+        total_seconds -= 1
+ 
+    return("finished")
 
 def setup_game():
 
@@ -23,20 +48,25 @@ def setup_game():
             i.config(text="{}".format(random.choice(pokemon_list)).title())
 
         answer_button = random.choice(buttons)
+        answer_button.config(text=question.title())
         raise_frame(quiz_frame)
         return(answer_button)
 
     def answer_question(chosen_button, correct_button):
         if chosen_button == correct_button:
             print("correct")
-            correct_button.config(bg="green")
+            chosen_button.config(bg="green")
         else:
             print("incorrect")
-            correct_button.config(bg="red")
+            chosen_button.config(bg="red")
+
+        countdown(10)
         
-        correct_button.config(bg="SystemButtonFace")
-        answer_button = generate_question()
-        return(answer_button)
+        answer = generate_question()
+        answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
+        answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
+        answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
+        answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
         
 
 
@@ -73,12 +103,12 @@ def setup_game():
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
     #endregion
 
-    answer_button = generate_question()
+    answer = generate_question()
 
-    answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
-    answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
-    answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
-    answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
+    answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
+    answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
+    answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
+    answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
     
 root = Tk()
 
