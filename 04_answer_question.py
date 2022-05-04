@@ -12,10 +12,12 @@ def setup_game():
         buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
         question = random.choice(pokemon_list)
         question_picture = Image.open("images/{}.png".format(question))
-        resized_image = question_picture.resize((1000, 1000))
+        # Resize the image using resize() method so it fits in frame
+        resized_image = question_picture.resize((475, 475))
         question_picture = ImageTk.PhotoImage(resized_image)
 
         question_label.config(image=question_picture)
+        question_label.image = question_picture
 
         for i in buttons:
             i.config(text="{}".format(random.choice(pokemon_list)).title())
@@ -23,6 +25,19 @@ def setup_game():
         answer_button = random.choice(buttons)
         answer_button.config(text=question.title(), bg="red")
         raise_frame(quiz_frame)
+        return(answer_button)
+
+    def answer_question(chosen_button, correct_button):
+        if chosen_button == correct_button:
+            print("correct")
+        else:
+            print("incorrect")
+        
+        correct_button.config(bg="SystemButtonFace")
+        answer_button = generate_question()
+        return(answer_button)
+        
+
 
     with open('pokemon.csv') as file:
         content = file.readlines()
@@ -30,7 +45,7 @@ def setup_game():
     pokemon_list = []
     for i in content:
         pokemon_list.append(i.strip())
-    
+
     #region Quiz Frame
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0, pady=10)
@@ -38,10 +53,10 @@ def setup_game():
     stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10, pady=10)
 
-    question_label = Label(quiz_frame, width=475, height=475, image="", background="#a9cad4")
+    question_label = Label(quiz_frame, width=475, height=475, background="white")
     question_label.grid(row=1, column=0, pady=50, padx=30)
 
-    answer_button_frame = Frame(quiz_frame)
+    answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, pady=30, padx=50)
 
     answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
@@ -57,7 +72,12 @@ def setup_game():
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
     #endregion
 
-    generate_question()
+    answer_button = generate_question()
+
+    answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
+    answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
+    answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
+    answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
     
 root = Tk()
 
@@ -71,9 +91,6 @@ Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, 
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-test = PhotoImage(file="blastoise.png")
-# Resize the image using resize() method
-
 
 #endregion
 
