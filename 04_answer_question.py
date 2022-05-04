@@ -23,15 +23,16 @@ def setup_game():
             i.config(text="{}".format(random.choice(pokemon_list)).title())
 
         answer_button = random.choice(buttons)
-        answer_button.config(text=question.title(), bg="red")
         raise_frame(quiz_frame)
         return(answer_button)
 
     def answer_question(chosen_button, correct_button):
         if chosen_button == correct_button:
             print("correct")
+            correct_button.config(bg="green")
         else:
             print("incorrect")
+            correct_button.config(bg="red")
         
         correct_button.config(bg="SystemButtonFace")
         answer_button = generate_question()
