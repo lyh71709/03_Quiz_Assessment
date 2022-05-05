@@ -21,30 +21,31 @@ def setup_game():
         question_label.image = question_picture
 
         for i in buttons:
-            i.config(text="{}".format(random.choice(pokemon_list)).title())
+            i.config(text="{}".format(random.choice(pokemon_list)).title(), bg="SystemButtonFace")
 
         answer_button = random.choice(buttons)
         answer_button.config(text=question.title())
         raise_frame(quiz_frame)
+        continue_button.grid_forget()
+
+        answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
+        answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
+        answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
+        answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
+
         return(answer_button)
 
     def answer_question(chosen_button, correct_button):
         if chosen_button == correct_button:
             print("correct")
             chosen_button.config(bg="green")
-            
         else:
             print("incorrect")
             chosen_button.config(bg="red")
 
-        answer = generate_question()
-        answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
-        answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
-        answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
-        answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
+        continue_button.grid(row=2, column=1)
+        continue_button.config(command=generate_question)
         
-
-
     with open('pokemon.csv') as file:
         content = file.readlines()
 
@@ -57,13 +58,13 @@ def setup_game():
     question_num_label.grid(row=0, column=0, pady=10)
 
     stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
-    stats_label.grid(row=0, column=1, padx=10, pady=10)
+    stats_label.grid(row=0, column=1, padx=10)
 
     question_label = Label(quiz_frame, width=475, height=475, background="white")
-    question_label.grid(row=1, column=0, pady=50, padx=30)
+    question_label.grid(row=1, column=0, padx=30)
 
     answer_button_frame = Frame(quiz_frame, bg="white")
-    answer_button_frame.grid(row=1, column=1, pady=30, padx=50)
+    answer_button_frame.grid(row=1, column=1, padx=50)
 
     answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
@@ -75,16 +76,14 @@ def setup_game():
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
     answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
-    answer_d_button.grid(row=1, column=1, pady=20, padx=20)
+    answer_d_button.grid(row=1, column=1, padx=20)
+
+    continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
+    continue_button.grid(row=2, column=1)
     #endregion
 
-    answer = generate_question()
+    generate_question()
 
-    answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
-    answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
-    answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
-    answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
-    
 root = Tk()
 
 #region Variables

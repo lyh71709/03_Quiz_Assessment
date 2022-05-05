@@ -1,26 +1,25 @@
+import tkinter as tk
+    
 
-# import the time module
-import time
+class Test():
+   def __init__(self):
+       self.root = tk.Tk()
+       self.label=tk.Label(self.root,
+                           text = "Label")
+       self.buttonForget = tk.Button(self.root,
+                          text = 'Click to hide Label',
+                          command=lambda: self.label.pack_forget())
+       self.buttonRecover = tk.Button(self.root,
+                          text = 'Click to show Label',
+                          command=lambda: self.label.pack())       
+       
+       self.buttonForget.pack()
+       self.buttonRecover.pack()
+       self.label.pack(side="bottom")
+       self.root.mainloop()
 
-# define the countdown func.
-def countdown(t):
-	
-	while t:
-		mins, secs = divmod(t, 60)
-		timer = '{:02d}:{:02d}'.format(mins, secs)
-		print(timer, end="\r")
-		time.sleep(1)
-		t -= 1
-	
-	print('Fire in the hole!!')
-
-	def hello():
-		print("hello")
-
-
-# input time in seconds
-t = input("Enter the time in seconds: ")
-
-# function call
-countdown(int(t))
+   def quit(self):
+       self.root.destroy()
+        
+app = Test()
 
