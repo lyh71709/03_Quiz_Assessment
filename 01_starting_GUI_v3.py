@@ -5,9 +5,11 @@ from PIL import ImageFilter
 
 root = Tk()
 
+# Moves frame to the top
 def raise_frame(frame):
     frame.tkraise()
 
+# Exits game
 def quit_game():
         root.destroy()
 
@@ -17,6 +19,7 @@ Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size 
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
 
+# Setting up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
@@ -108,5 +111,6 @@ back_button.grid(row=4, pady=50)
 root.title("Who's That Pokemon?")
 root.geometry("1920x1080")
 root.config(background="white")
+# Makes game fullscreen
 root.state('zoomed')
 root.mainloop()

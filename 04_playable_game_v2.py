@@ -4,14 +4,17 @@ from turtle import screensize
 from PIL import Image, ImageTk,  ImageFilter
 import csv
 import time
-import datetime
 import random
 
+# Actual Game
 def setup_game():
 
+    # Generate the question and alters the answers
     def generate_question():
         buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
+        # Randomly select pokemon
         question = random.choice(pokemon_list)
+        # Finds the image of pokemon
         question_picture = Image.open("images/{}.png".format(question))
         # Resize the image using resize() method so it fits in frame
         resized_image = question_picture.resize((475, 475))
@@ -20,22 +23,29 @@ def setup_game():
         question_label.config(image=question_picture)
         question_label.image = question_picture
 
+        # Removes the pokemon from list so we won't have duplicates
+        pokemon_list.remove(question)
+
+        # Change the buttons back to default
         for i in buttons:
             i.config(text="{}".format(random.choice(pokemon_list)).title(), bg="SystemButtonFace")
 
+        # Selects one button to be the actual answer
         answer_button = random.choice(buttons)
         answer_button.config(text=question.title())
         raise_frame(quiz_frame)
+        # Gets rid of continue_button
         continue_button.grid_forget()
 
+        # Bind all buttons for answer function
         answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
         answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
         answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
         answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
 
-        return(answer_button)
-
+    # When user answers question
     def answer_question(chosen_button, correct_button):
+        # Checks if user got question right or wrong
         if chosen_button == correct_button:
             print("correct")
             chosen_button.config(bg="green")
@@ -43,9 +53,11 @@ def setup_game():
             print("incorrect")
             chosen_button.config(bg="red")
 
+        # Makes continue button reappear
         continue_button.grid(row=2, column=1)
         continue_button.config(command=generate_question)
-        
+    
+    # Use CSV to make a list
     with open('pokemon.csv') as file:
         content = file.readlines()
 
@@ -93,27 +105,19 @@ Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size 
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
 
+# Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 
 #endregion
 
+# Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
-
+# Exit Game
 def quit_game():
         root.destroy()
-
-def countdown(t):
-	
-	while t:
-		mins, secs = divmod(t, 60)
-		timer = '{:02d}:{:02d}'.format(mins, secs)
-		time.sleep(1)
-		t -= 1
-	
-	return("finished")
 
 # Setup Frames
 heading_frame = Frame(bg="white")
@@ -184,5 +188,6 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 root.title("Who's That Pokemon?")
 root.geometry("1920x1080")
 root.config(background="white")
+# Makes game fullscreen
 root.state('zoomed')
 root.mainloop()

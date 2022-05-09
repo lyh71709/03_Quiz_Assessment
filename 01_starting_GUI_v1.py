@@ -11,6 +11,7 @@ class Start:
         Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
         Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 
+        # Starting Frame
         logo = ImageTk.PhotoImage(Image.open("pokeball_icon.png"))
         
         self.starting_frame = Frame(padx=600, pady=80, background="white")
@@ -36,6 +37,7 @@ class Start:
         self.quit_button.grid(row=0, column=2, padx=10)
 
     def quit_game(self):
+        # Destroy Window
         root.destroy()
     
         

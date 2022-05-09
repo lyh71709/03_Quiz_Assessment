@@ -6,31 +6,40 @@ import csv
 import time
 import random
 
+# Actual Game
 def setup_game():
 
+    # Generates the question and alters the answers
     def generate_question():
         buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
+        # Randomly selects Pokemon
         question = random.choice(pokemon_list)
+        # Finds Image of randomly selected pokemon
         question_picture = Image.open("images/{}.png".format(question))
+        # Resizes image to fit the label
         resized_image = question_picture.resize((475, 475))
         question_picture = ImageTk.PhotoImage(resized_image)
 
         question_label.config(image=question_picture)
         question_label.image = question_picture
 
+        # Change the buttons back to default
         for i in buttons:
             i.config(text="{}".format(random.choice(pokemon_list)).title())
 
+        # Selects one button to be the actual answer
         answer_button = random.choice(buttons)
         answer_button.config(text=question.title(), bg="red")
         raise_frame(quiz_frame)
 
+    # Use CSV to make a list
     with open('pokemon.csv') as file:
         content = file.readlines()
 
     pokemon_list = []
     for i in content:
         pokemon_list.append(i.strip())
+
     
     #region Quiz Frame
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
@@ -69,30 +78,20 @@ Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size 
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
 
+# Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-test = PhotoImage(file="blastoise.png")
-# Resize the image using resize() method
 
 
 #endregion
 
+# Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
-
+# Exit Game
 def quit_game():
         root.destroy()
-
-def countdown(t):
-	
-	while t:
-		mins, secs = divmod(t, 60)
-		timer = '{:02d}:{:02d}'.format(mins, secs)
-		time.sleep(1)
-		t -= 1
-	
-	return("finished")
 
 # Setup Frames
 heading_frame = Frame(bg="white")
@@ -163,5 +162,6 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 root.title("Who's That Pokemon?")
 root.geometry("1920x1080")
 root.config(background="white")
+# Make game fullscreen
 root.state('zoomed')
 root.mainloop()

@@ -19,11 +19,6 @@ class Start:
         self.logo_label.photo = photo
         self.logo_label.grid(row=1)
 
-
-
-        
-
-
 # main routine
 if __name__ == "__main__":
     root = Tk()

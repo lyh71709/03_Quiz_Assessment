@@ -49,6 +49,7 @@ class Game:
         self.heading_label.grid(row=0)
 
     def quit_game(self):
+        # Destroy window
         root.destroy()
 
 # main routine

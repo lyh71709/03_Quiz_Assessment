@@ -4,11 +4,64 @@ from turtle import screensize
 from PIL import Image, ImageTk,  ImageFilter
 import csv
 import time
+import datetime
 import random
 
 # Actual Game
-def play_game():
-    raise_frame(quiz_frame)
+def setup_game():
+
+    # Generate the question and alters the answers
+    def generate_question():
+        buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
+        # Randomly select pokemon
+        question = random.choice(pokemon_list)
+        # Finds the image of pokemon
+        question_picture = Image.open("images/{}.png".format(question))
+        # Resize the image using resize() method so it fits in frame
+        resized_image = question_picture.resize((475, 475))
+        question_picture = ImageTk.PhotoImage(resized_image)
+
+        question_label.config(image=question_picture)
+        question_label.image = question_picture
+
+        # Removes the pokemon from list so we won't have duplicates
+        pokemon_list.remove(question)
+
+        # Change the buttons back to default
+        for i in buttons:
+            i.config(text="{}".format(random.choice(pokemon_list)).title())
+
+        # Selects one button to be the actual answer
+        answer_button = random.choice(buttons)
+        answer_button.config(text=question.title())
+        raise_frame(quiz_frame)
+
+    # When user answers question
+    def answer_question(chosen_button, correct_button):
+        # Checks if user got question right or wrong
+        if chosen_button == correct_button:
+            print("correct")
+            chosen_button.config(bg="green")
+            
+        else:
+            print("incorrect")
+            chosen_button.config(bg="red")
+
+        # Generates the next question
+        answer = generate_question()
+        # Bind all buttons for answer function
+        answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
+        answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
+        answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
+        answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
+
+    # Use CSV to make a list
+    with open('pokemon.csv') as file:
+        content = file.readlines()
+
+    pokemon_list = []
+    for i in content:
+        pokemon_list.append(i.strip())
 
     #region Quiz Frame
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
@@ -17,10 +70,10 @@ def play_game():
     stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10, pady=10)
 
-    question_label = Label(quiz_frame, width=475, height=475, image=test, background="red")
+    question_label = Label(quiz_frame, width=475, height=475, background="white")
     question_label.grid(row=1, column=0, pady=50, padx=30)
 
-    answer_button_frame = Frame(quiz_frame)
+    answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, pady=30, padx=50)
 
     answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
@@ -36,6 +89,13 @@ def play_game():
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
     #endregion
 
+    # Generates the first question when the game starts
+    answer = generate_question()
+    answer_a_button.config(command= lambda: answer_question(answer_a_button, answer))
+    answer_b_button.config(command= lambda: answer_question(answer_b_button, answer))
+    answer_c_button.config(command= lambda: answer_question(answer_c_button, answer))
+    answer_d_button.config(command= lambda: answer_question(answer_d_button, answer))
+    
 root = Tk()
 
 #region Variables
@@ -45,26 +105,15 @@ Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size 
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
 
-# Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-test = PhotoImage(file="absol.png")
-# Resize the image using resize() method
 
-pokemon_list = []
-dataset = open("pokemon.csv")
-csvreader = csv.reader(dataset)
-for row in csvreader:
-    pokemon_list.append(row)
-dataset.close()
 #endregion
 
-# Brings frame to the top
 def raise_frame(frame):
     frame.tkraise()
 
-# Exits Game
 def quit_game():
         root.destroy()
 
@@ -94,7 +143,6 @@ heading_label.grid(row=0)
 #endregion
 
 #region Starting Frame
-
 frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white")
 frame_set_size.grid(row=0)
 
@@ -127,7 +175,7 @@ normal_label.grid(row=0, column=0, padx=20)
 master_label = Label(difficulty_button_frame, font=Karmatic_Arcade_subheading, text="Master", fg="purple",background="white")
 master_label.grid(row=0, column=1, padx=20)
 
-normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, command=play_game)
+normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, command=setup_game)
 normal_button.grid(row=1, column=0, padx=25, pady=5)
 
 master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, command=quit_game)
