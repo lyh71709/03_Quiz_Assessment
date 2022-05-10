@@ -49,13 +49,14 @@ def setup_game():
         if chosen_button == correct_button:
             print("correct")
             chosen_button.config(bg="green")
+            
+            
         else:
             print("incorrect")
             chosen_button.config(bg="red")
-
-        # Makes continue button reappear
-        continue_button.grid(row=2, column=1)
-        continue_button.config(command=generate_question)
+        
+        # When answering, pauses game for x seconds then generates next question
+        root.after(3000, generate_question)
     
     # Use CSV to make a list
     with open('pokemon.csv') as file:
@@ -69,7 +70,7 @@ def setup_game():
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0, pady=10)
 
-    stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
+    stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}", font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10)
 
     question_label = Label(quiz_frame, width=475, height=475, background="white")
@@ -78,22 +79,22 @@ def setup_game():
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=50)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, relief="solid")
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, relief="solid")
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
-    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, relief="solid")
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, relief="solid")
     answer_d_button.grid(row=1, column=1, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
     continue_button.grid(row=2, column=1)
     #endregion
-
+    
     generate_question()
 
 root = Tk()
@@ -109,7 +110,6 @@ Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, 
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-
 #endregion
 
 # Bring frame to the top
@@ -177,10 +177,10 @@ normal_label.grid(row=0, column=0, padx=20)
 master_label = Label(difficulty_button_frame, font=Karmatic_Arcade_subheading, text="Master", fg="purple",background="white")
 master_label.grid(row=0, column=1, padx=20)
 
-normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, command=setup_game)
+normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, borderwidth=0, highlightthickness=0, command=setup_game)
 normal_button.grid(row=1, column=0, padx=25, pady=5)
 
-master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, command=quit_game)
+master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, borderwidth=0, highlightthickness=0, command=quit_game)
 master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 

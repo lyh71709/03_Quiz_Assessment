@@ -6,13 +6,8 @@ import csv
 import time
 import random
 
-lives = 3
-score = 0
-
 # Actual Game
 def setup_game():
-
-    
 
     # Generate the question and alters the answers
     def generate_question():
@@ -50,20 +45,13 @@ def setup_game():
 
     # When user answers question
     def answer_question(chosen_button, correct_button):
-        global lives, score
-    
         # Checks if user got question right or wrong
         if chosen_button == correct_button:
             print("correct")
             chosen_button.config(bg="green")
-            score += 1
         else:
             print("incorrect")
             chosen_button.config(bg="red")
-            correct_button.config(bg="green")
-            lives -= 1
-
-        stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
 
         # Makes continue button reappear
         continue_button.grid(row=2, column=1)
@@ -81,7 +69,7 @@ def setup_game():
     question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0, pady=10)
 
-    stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
+    stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10)
 
     question_label = Label(quiz_frame, width=475, height=475, background="white")
@@ -116,8 +104,6 @@ Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 6
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 40, weight = "bold")
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
-
-
 
 # Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")

@@ -1,9 +1,9 @@
-from tkinter import *
+x = "awesome"
 
-ws = Tk()
-ws.title('PythonGuides')
-ws.geometry('300x200')   
+def myfunc():
+  x = "fantastic"
+  print("Python is " + x)
 
-Button(ws, text="Smash Me", activebackground='#345',activeforeground='white', padx=5, pady=5, bg="#001655" ).pack(pady=10)
+myfunc()
 
-ws.mainloop()
+print("Python is " + x)
