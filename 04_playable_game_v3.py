@@ -12,8 +12,6 @@ score = 0
 # Actual Game
 def setup_game():
 
-    
-
     # Generate the question and alters the answers
     def generate_question():
         buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
@@ -88,7 +86,7 @@ def setup_game():
     question_label.grid(row=1, column=0, padx=30)
 
     answer_button_frame = Frame(quiz_frame, bg="white")
-    answer_button_frame.grid(row=1, column=1, padx=30)
+    answer_button_frame.grid(row=1, column=1, padx=50)
 
     answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
@@ -100,27 +98,31 @@ def setup_game():
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
     answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
-    answer_d_button.grid(row=1, column=1, padx=20)
+    answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
-    continue_button.grid(row=1, column=1, pady=1)
+    continue_button.grid(row=2, column=1)
+
+    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2)
+    quit_button.grid(row=2, column=0)
     #endregion
 
     generate_question()
+
 
 root = Tk()
 
 #region Variables
 # Setup my karmatic arcade font
-Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 60, weight = "bold")
-Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 40, weight = "bold")
-Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
-Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
-
-
+Karmatic_Arcade_heading = tkinter.font.Font(family = "Redensec Regular", size = 60, weight = "bold")
+Karmatic_Arcade_subheading = tkinter.font.Font(family = "Redensec Regular", size = 40, weight = "bold")
+Karmatic_Arcade_button = tkinter.font.Font(family = "Redensec Regular", size = 18, weight = "normal")
+Karmatic_Arcade_text = tkinter.font.Font(family = "Redensec Regular", size = 12, weight = "normal")
 
 # Set up images
-pokeball_icon = PhotoImage(file="pokeball_icon.gif")
+pokeball_icon = Image.open("pokeball_icon.gif")
+resized_image = pokeball_icon.resize((316, 316))
+pokeball_icon = ImageTk.PhotoImage(resized_image)
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 
@@ -148,7 +150,7 @@ difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
 quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
-quiz_frame.place(anchor="c", relx=.5, rely=0.5)
+quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
 raise_frame(heading_frame)
 raise_frame(starting_frame)
@@ -162,7 +164,7 @@ heading_label.grid(row=0)
 frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white")
 frame_set_size.grid(row=0)
 
-pokemon_logo = Label(starting_frame, width = 500, height=500, image=pokeball_icon, background="white")
+pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white")
 pokemon_logo.grid(row=1, pady=50)
 
 starting_button_frame = Frame(starting_frame, pady=50, background="white")
@@ -200,7 +202,7 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 
 # main routine
 root.title("Who's That Pokemon?")
-root.geometry("1920x1080")
+root.geometry("1280x720")
 root.config(background="white")
 # Makes game fullscreen
 root.state('zoomed')

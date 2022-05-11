@@ -1,9 +1,9 @@
-x = "awesome"
+from tkinter import *
 
-def myfunc():
-  x = "fantastic"
-  print("Python is " + x)
+root = Tk()
 
-myfunc()
+width, height = root.winfo_screenwidth(), root.winfo_screenheight()
 
-print("Python is " + x)
+root.geometry('%dx%d+0+0' % (width,height))
+
+root.mainloop()
