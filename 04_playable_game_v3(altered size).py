@@ -109,7 +109,6 @@ def setup_game():
 
     generate_question()
 
-
 root = Tk()
 
 #region Variables
@@ -121,7 +120,7 @@ Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 10, 
 
 # Set up images
 pokeball_icon = Image.open("pokeball_icon.gif")
-resized_image = pokeball_icon.resize((316, 316))
+resized_image = pokeball_icon.resize((475, 475))
 pokeball_icon = ImageTk.PhotoImage(resized_image)
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
@@ -137,20 +136,20 @@ def quit_game():
 
 # Setup Frames
 heading_frame = Frame(bg="white")
-heading_frame.grid(row=0, pady=10, sticky="news")
+heading_frame.grid(row=0, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
-starting_frame = Frame(pady=80, bg="white")
+starting_frame = Frame(bg="white")
 starting_frame.grid(row=1, column=0, sticky="news")
-starting_frame.place(anchor="c", relx=.5, rely=0.7)
+starting_frame.place(anchor="c", relx=.5, rely=0.6)
 
 difficulty_frame = Frame(pady=80, bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
-difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
+difficulty_frame.place(anchor="c", relx=.5, rely=0.65)
 
 quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
-quiz_frame.place(anchor="c", relx=.5, rely=0.6)
+quiz_frame.place(anchor="c", relx=.5, rely=0.65)
 
 raise_frame(heading_frame)
 raise_frame(starting_frame)
@@ -161,11 +160,11 @@ heading_label.grid(row=0)
 #endregion
 
 #region Starting Frame
-frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white", height=1)
+frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white", text="", font=Karmatic_Arcade_text)
 frame_set_size.grid(row=0)
 
-pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white")
-pokemon_logo.grid(row=1, pady=10)
+pokemon_logo = Label(starting_frame, image=pokeball_icon, background="red", width=425, height=425)
+pokemon_logo.grid(row=0)
 
 starting_button_frame = Frame(starting_frame, pady=50, background="white")
 starting_button_frame.grid(row=2)

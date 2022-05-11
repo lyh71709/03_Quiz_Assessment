@@ -1,9 +1,38 @@
 from tkinter import *
+from tkinter import ttk
 
 root = Tk()
+root.title('title')
+root.geometry("1280x720")
+# Make the app resizable
+root.resizable(True, True) # Width, Height
 
-width, height = root.winfo_screenwidth(), root.winfo_screenheight()
+my_frame2 = Frame(root, highlightbackground="gray", highlightthickness=1)
+my_frame2.pack(pady=20)
 
-root.geometry('%dx%d+0+0' % (width,height))
+my_label = Label(my_frame2, text="Hello World!", 
+	font=("Helvetica", 32))
+my_label.pack(pady=50, padx=20)
+
+# Create Sizegrip
+my_sizegrip2 = ttk.Sizegrip(my_frame2)
+my_sizegrip2.pack(side="right", anchor=SE)
+
+
+# Reconfigure our rows and columns for grid
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+
+# Create a frame
+my_frame = Frame(root, highlightbackground="gray", highlightthickness=1)
+my_frame.pack(side="bottom", fill=X)
+
+# Create Sizegrip
+my_sizegrip = ttk.Sizegrip(my_frame)
+my_sizegrip.pack(side="right", anchor=SE)
+
+# Grid
+my_sizegrip.grid(row=1, sticky=SE)
+
 
 root.mainloop()
