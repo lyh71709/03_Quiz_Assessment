@@ -1,25 +1,26 @@
 import tkinter as tk
-    
+from tkinter import ttk
 
-class Test():
-   def __init__(self):
-       self.root = tk.Tk()
-       self.label=tk.Label(self.root,
-                           text = "Label")
-       self.buttonForget = tk.Button(self.root,
-                          text = 'Click to hide Label',
-                          command=lambda: self.label.pack_forget())
-       self.buttonRecover = tk.Button(self.root,
-                          text = 'Click to show Label',
-                          command=lambda: self.label.pack())       
-       
-       self.buttonForget.pack()
-       self.buttonRecover.pack()
-       self.label.pack(side="bottom")
-       self.root.mainloop()
+root = tk.Tk()
+root.resizable(False, False)
+root.title("Scrollbar Widget Example")
 
-   def quit(self):
-       self.root.destroy()
-        
-app = Test()
+# apply the grid layout
+root.grid_columnconfigure(0, weight=1)
+root.grid_rowconfigure(0, weight=1)
+
+# create the text widget
+text = tk.Text(root, height=10)
+text.grid(row=0, column=0, sticky='ew')
+
+# create a scrollbar widget and set its command to the text widget
+scrollbar = ttk.Scrollbar(root, orient='vertical', command=text.yview)
+scrollbar.grid(row=0, column=1, sticky='ns')
+
+#  communicate back to the scrollbar
+text['yscrollcommand'] = scrollbar.set
+
+
+root.mainloop()
+
 

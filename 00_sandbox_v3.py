@@ -1,38 +1,29 @@
 from tkinter import *
-from tkinter import ttk
 
-root = Tk()
-root.title('title')
-root.geometry("1280x720")
-# Make the app resizable
-root.resizable(True, True) # Width, Height
+def data():
+    for i in range(50):
+       Label(frame,text=i).grid(row=i,column=0)
+       Label(frame,text="my text"+str(i)).grid(row=i,column=1)
+       Label(frame,text="..........").grid(row=i,column=2)
 
-my_frame2 = Frame(root, highlightbackground="gray", highlightthickness=1)
-my_frame2.pack(pady=20)
+def myfunction(event):
+    canvas.configure(scrollregion=canvas.bbox("all"),width=200,height=200)
 
-my_label = Label(my_frame2, text="Hello World!", 
-	font=("Helvetica", 32))
-my_label.pack(pady=50, padx=20)
+root=Tk()
+sizex = 800
+sizey = 600
+posx  = 100
+posy  = 100
+root.wm_geometry("%dx%d+%d+%d" % (sizex, sizey, posx, posy))
 
-# Create Sizegrip
-my_sizegrip2 = ttk.Sizegrip(my_frame2)
-my_sizegrip2.pack(side="right", anchor=SE)
+canvas=Canvas(root)
+frame=Frame(canvas)
+myscrollbar=Scrollbar(root,orient="vertical",command=canvas.yview)
+canvas.configure(yscrollcommand=myscrollbar.set)
 
-
-# Reconfigure our rows and columns for grid
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
-
-# Create a frame
-my_frame = Frame(root, highlightbackground="gray", highlightthickness=1)
-my_frame.pack(side="bottom", fill=X)
-
-# Create Sizegrip
-my_sizegrip = ttk.Sizegrip(my_frame)
-my_sizegrip.pack(side="right", anchor=SE)
-
-# Grid
-my_sizegrip.grid(row=1, sticky=SE)
-
-
+myscrollbar.pack(side="right",fill="y")
+canvas.pack(side="left")
+canvas.create_window((0,0),window=frame,anchor='nw')
+frame.bind("<Configure>",myfunction)
+data()
 root.mainloop()
