@@ -8,13 +8,21 @@ import random
 
 lives = 3
 score = 0
+question_num = 0
 
 # Actual Game
 def setup_game():
 
     # Generate the question and alters the answers
     def generate_question():
-        buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
+        global question_num
+        
+        for i in buttons:
+            i.config(state=NORMAL)
+
+        question_num = question_num + 1
+        question_num_label.config(text="Question {}".format(question_num))
+
         # Randomly select pokemon
         question = random.choice(pokemon_list)
         # Finds the image of pokemon
@@ -49,6 +57,9 @@ def setup_game():
     # When user answers question
     def answer_question(chosen_button, correct_button):
         global lives, score
+
+        for i in buttons:
+            i.config(state=DISABLED)
     
         # Checks if user got question right or wrong
         if chosen_button == correct_button:
@@ -61,7 +72,7 @@ def setup_game():
             correct_button.config(bg="green")
             lives -= 1
 
-        stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
+        stats_label.config(text="Lives {}\nScore {}".format(lives, score))
 
         # Makes continue button reappear
         continue_button.grid(row=2, column=1)
@@ -76,10 +87,10 @@ def setup_game():
         pokemon_list.append(i.strip())
 
     #region Quiz Frame
-    question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
+    question_num_label = Label(quiz_frame, text="Question {}".format(question_num), font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0, pady=10)
 
-    stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
+    stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
     stats_label.grid(row=0, column=1, padx=10)
 
     question_label = Label(quiz_frame, width=475, height=475, background="white")
@@ -106,7 +117,7 @@ def setup_game():
     quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2)
     quit_button.grid(row=2, column=0)
     #endregion
-
+    buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
     generate_question()
 
 
@@ -163,7 +174,7 @@ frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="whi
 frame_set_size.grid(row=0)
 
 pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white")
-pokemon_logo.grid(row=1, pady=10)
+pokemon_logo.grid(row=1, pady=50)
 
 starting_button_frame = Frame(starting_frame, pady=50, background="white")
 starting_button_frame.grid(row=2)
