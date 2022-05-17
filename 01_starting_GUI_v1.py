@@ -14,14 +14,7 @@ class Start:
         # Starting Frame
         logo = ImageTk.PhotoImage(Image.open("pokeball_icon.gif"))
 
-        self.canvas = Canvas(root)
-        self.canvas.grid()
-
-        myscrollbar=Scrollbar(root,orient="vertical",command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=myscrollbar.set)
-        myscrollbar.grid(row=0, column=1, sticky="NS")
-
-        self.starting_frame = Frame(self.canvas, padx=600, pady=80, background="white")
+        self.starting_frame = Frame(padx=600, pady=80, background="white")
         self.starting_frame.grid()
 
         self.heading_label = Label(self.starting_frame, font=Karmatic_Arcade_heading, text="Who's That Pokemon?", background="white", justify=CENTER)
@@ -51,9 +44,6 @@ class Start:
     def to_difficuty_select(self):
         root.withdraw()
         Difficulty(self)
-
-    def myfunction(self, event):
-            self.canvas.configure(scrollregion=self.canvas.bbox("all"),width=200,height=200)
 
 class Difficulty:
     def __init__(self, partner):
