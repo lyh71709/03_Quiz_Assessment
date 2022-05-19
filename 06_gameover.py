@@ -1,3 +1,4 @@
+from msilib.schema import ListBox
 from tkinter import *
 import tkinter.font
 from turtle import screensize
@@ -14,16 +15,19 @@ correct_list = []
 incorrect_list = []
 
 def game_over():
+
+    raise_frame(gameover_frame)
     #region Gameover Frame
 
-    # gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red")
-    # gameover_label.grid(row=0, column=0, pady=10)
+    gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red")
+    gameover_label.grid(row=0, column=0, pady=10)
 
-    # stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
-    # stats_label.grid(row=0, column=1, padx=10)
-
-    # question_label = Label(quiz_frame, width=475, height=475, background="white")
-    # question_label.grid(row=1, column=0, padx=30)
+    stats_frame = Label(gameover_frame, bg="white")
+    stats_frame.grid(row=1)
+    
+    correct_list_var = StringVar(value=correct_list)
+    correct_listbox = Listbox(stats_frame, correct_list, len(correct_list))
+    correct_listbox.grid(row=0, column=0)
 
     # answer_button_frame = Frame(quiz_frame, bg="white")
     # answer_button_frame.grid(row=1, column=1, padx=50)
@@ -69,7 +73,7 @@ def setup_game():
         # Finds the image of pokemon
         question_picture = Image.open("images/{}.png".format(question))
         # Resize the image using resize() method so it fits in frame
-        resized_image = question_picture.resize((475, 475))
+        resized_image = question_picture.resize((400, 400))
         question_picture = ImageTk.PhotoImage(resized_image)
 
         question_label.config(image=question_picture)
@@ -136,16 +140,16 @@ def setup_game():
     #region Quiz Frame
 
     question_num_label = Label(quiz_frame, text="Question {}".format(question_num), font=Karmatic_Arcade_subheading, bg="white")
-    question_num_label.grid(row=0, column=0, pady=10)
+    question_num_label.grid(row=0, column=0)
 
     stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
-    stats_label.grid(row=0, column=1, padx=10)
+    stats_label.grid(row=0, column=1, padx=5)
 
-    question_label = Label(quiz_frame, width=475, height=475, background="white")
-    question_label.grid(row=1, column=0, padx=30)
+    question_label = Label(quiz_frame, background="white")
+    question_label.grid(row=1, column=0, padx=20)
 
     answer_button_frame = Frame(quiz_frame, bg="white")
-    answer_button_frame.grid(row=1, column=1, padx=50)
+    answer_button_frame.grid(row=1, column=1, padx=40)
 
     answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
@@ -174,13 +178,13 @@ root = Tk()
 
 #region Variables
 # Setup my karmatic arcade font
-Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 60, weight = "bold")
-Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 40, weight = "bold")
-Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
-Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
+Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
+Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
+Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
+Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 10, weight = "normal")
 
 # Set up images
-pokeball_icon = PhotoImage(file="pokeball_icon.gif")
+pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 
@@ -198,11 +202,11 @@ heading_frame = Frame(bg="white")
 heading_frame.grid(row=0, pady=10, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
-starting_frame = Frame(pady=80, bg="white")
+starting_frame = Frame(bg="white")
 starting_frame.grid(row=1, column=0, sticky="news")
-starting_frame.place(anchor="c", relx=.5, rely=0.6)
+starting_frame.place(anchor="c", relx=.5, rely=0.55)
 
-difficulty_frame = Frame(pady=80, bg="white")
+difficulty_frame = Frame(bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
 difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
@@ -223,14 +227,11 @@ heading_label.grid(row=0)
 #endregion
 
 #region Starting Frame
-frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white")
-frame_set_size.grid(row=0)
+pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white", width=1000)
+pokemon_logo.grid(row=0, pady=20)
 
-pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white")
-pokemon_logo.grid(row=1, pady=50)
-
-starting_button_frame = Frame(starting_frame, pady=50, background="white")
-starting_button_frame.grid(row=2)
+starting_button_frame = Frame(starting_frame, background="white")
+starting_button_frame.grid(row=1, pady=10)
 
 help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10)
 help_button.grid(row=0, column=0, padx=10)
@@ -244,7 +245,7 @@ quit_button.grid(row=0, column=2, padx=10)
 
 #region Difficulty Frame
 pokemon_logo = Label(difficulty_frame, font=Karmatic_Arcade_subheading, text="Select Your Difficulty", fg="blue",background="white")
-pokemon_logo.grid(row=0, pady=15)
+pokemon_logo.grid(row=0, pady=50)
 
 difficulty_button_frame = Frame(difficulty_frame, pady=50, background="white")
 difficulty_button_frame.grid(row=1, pady=50)
@@ -264,8 +265,8 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 
 # main routine
 root.title("Who's That Pokemon?")
-root.geometry("1920x1080")
+root.geometry("1280x720")
 root.config(background="white")
 # Makes game fullscreen
-root.state('zoomed')
+# root.state('zoomed')
 root.mainloop()
