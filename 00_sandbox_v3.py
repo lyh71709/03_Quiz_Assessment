@@ -12,16 +12,20 @@ root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
 
 # create a list box
-langs = ('Java', 'C#', 'C', 'C++', 'Python',
-        'Go', 'JavaScript', 'PHP', 'Swift')
 
-langs_var = tk.StringVar(value=langs)
+# Use CSV to make a list
+with open('pokemon.csv') as file:
+    content = file.readlines()
+
+pokemon_list = []
+for i in content:
+    pokemon_list.append(i.strip())
+
+langs_var = tk.StringVar(value=pokemon_list)
 
 listbox = tk.Listbox(
     root,
-    listvariable=langs_var,
-    height=6,
-    selectmode='extended')
+    listvariable=langs_var)
 
 listbox.grid(
     column=0,

@@ -26,8 +26,14 @@ def game_over():
     stats_frame.grid(row=1)
     
     correct_list_var = StringVar(value=correct_list)
-    correct_listbox = Listbox(stats_frame, correct_list, len(correct_list))
+    correct_listbox = Listbox(stats_frame, correct_list_var)
     correct_listbox.grid(row=0, column=0)
+
+    gameover_stats_label = Label(stats_frame, text="Score: {}")
+
+    incorrect_list_var = StringVar(value=incorrect_list)
+    incorrect_listbox = Listbox(stats_frame, incorrect_list_var)
+    incorrect_listbox.grid(row=0, column=2)
 
     # answer_button_frame = Frame(quiz_frame, bg="white")
     # answer_button_frame.grid(row=1, column=1, padx=50)
@@ -119,7 +125,7 @@ def setup_game():
             incorrect_list.append(correct_button.cget('text'))
             lives -= 1
 
-        stats_label.config(text="Lives {}\nScore {}".format(lives, score))
+        game_stats_label.config(text="Lives {}\nScore {}".format(lives, score))
 
         if lives <= 0:
             game_over()
@@ -142,8 +148,8 @@ def setup_game():
     question_num_label = Label(quiz_frame, text="Question {}".format(question_num), font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0)
 
-    stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
-    stats_label.grid(row=0, column=1, padx=5)
+    game_stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
+    game_stats_label.grid(row=0, column=1, padx=5)
 
     question_label = Label(quiz_frame, background="white")
     question_label.grid(row=1, column=0, padx=20)
