@@ -1,10 +1,8 @@
-from msilib.schema import ListBox
 from tkinter import *
 import tkinter.font
 from turtle import screensize
-from PIL import Image, ImageTk,  ImageFilter
-import csv
-import time
+from PIL import Image, ImageTk, ImageFilter
+import os
 import random
 
 lives = 3
@@ -17,47 +15,40 @@ incorrect_list = []
 def game_over():
 
     raise_frame(gameover_frame)
+
     #region Gameover Frame
 
-    gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red")
-    gameover_label.grid(row=0, column=0, pady=10)
+    gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_heading, bg="white", fg="red", width=100)
+    gameover_label.grid(row=0, column=0, pady=15)
 
     stats_frame = Label(gameover_frame, bg="white")
-    stats_frame.grid(row=1)
+    stats_frame.grid(row=1, pady=20)
     
-    correct_list_var = StringVar(value=correct_list)
-    correct_listbox = Listbox(stats_frame, correct_list_var)
-    correct_listbox.grid(row=0, column=0)
+    correct_listbox_label = Label(stats_frame, text="Pokemon you got", font=Karmatic_Arcade_big_text)
+    correct_listbox_label.grid(row=0, column=0)
 
-    gameover_stats_label = Label(stats_frame, text="Score: {}")
+    incorrect_listbox_label = Label(stats_frame, text="Pokemon you forgot", font=Karmatic_Arcade_big_text)
+    incorrect_listbox_label.grid(row=0, column=2)
+
+    correct_list_var = StringVar(value=correct_list)
+    correct_listbox = Listbox(stats_frame, listvariable=correct_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0)
+    correct_listbox.grid(row=1, column=0)
+
+    gameover_stats_label = Label(stats_frame, text="Score: {} \nQuestion Number: {}".format(score, question_num), font=Karmatic_Arcade_big_text)
+    gameover_stats_label.grid(row=1, column=1)
 
     incorrect_list_var = StringVar(value=incorrect_list)
-    incorrect_listbox = Listbox(stats_frame, incorrect_list_var)
-    incorrect_listbox.grid(row=0, column=2)
+    incorrect_listbox = Listbox(stats_frame, listvariable=incorrect_list_var, font=Karmatic_Arcade_small_text, height=20)
+    incorrect_listbox.grid(row=1, column=2)
 
-    # answer_button_frame = Frame(quiz_frame, bg="white")
-    # answer_button_frame.grid(row=1, column=1, padx=50)
+    export_button = Button(stats_frame, text="Export", font=Karmatic_Arcade_button)
+    export_button.grid(row=2, column=0)
 
-    # answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
-    # answer_a_button.grid(row=0, column=0, pady=20, padx=20)
+    play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button, command=restart)
+    play_again_button.grid(row=2, column=1)
 
-    # answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
-    # answer_b_button.grid(row=0, column=1, pady=20, padx=20)
-
-    # answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
-    # answer_c_button.grid(row=1, column=0, pady=20, padx=20)
-
-    # answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
-    # answer_d_button.grid(row=1, column=1, pady=20, padx=20)
-
-    # continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
-    # continue_button.grid(row=2, column=1)
-
-    # quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2)
-    # quit_button.grid(row=2, column=0)
-
-    print("Correct: {}".format(correct_list))
-    print("Incorrect: {}".format(incorrect_list))
+    quit_button = Button(stats_frame, text="Quit", font=Karmatic_Arcade_button, command=quit_game)
+    quit_button.grid(row=2, column=2)
     #endregion
 
 
@@ -172,7 +163,7 @@ def setup_game():
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
     continue_button.grid(row=2, column=1)
 
-    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2)
+    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=game_over)
     quit_button.grid(row=2, column=0)
     #endregion
 
@@ -187,7 +178,8 @@ root = Tk()
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
-Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 10, weight = "normal")
+Karmatic_Arcade_small_text = tkinter.font.Font(family = "Karmatic Arcade", size = 10, weight = "normal")
+Karmatic_Arcade_big_text = tkinter.font.Font(family = "Karmatic Arcade", size = 20, weight = "normal")
 
 # Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
@@ -196,6 +188,10 @@ master_icon = PhotoImage(file="masterball.gif")
 
 #endregion
 
+# Restarts the Whole Window    
+def restart():
+    root.destroy()
+    os.startfile(".pyw")
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
@@ -220,7 +216,7 @@ quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
 quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
-gameover_frame = Frame(bg="white")
+gameover_frame = Frame(bg="red")
 gameover_frame.grid(row=1, column=0, sticky="news")
 gameover_frame.place(anchor="c", relx=.5, rely=0.6)
 
