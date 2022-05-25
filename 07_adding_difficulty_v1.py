@@ -27,7 +27,7 @@ def game_over():
     correct_listbox_label = Label(stats_frame, text="Pokemon you got", font=Karmatic_Arcade_big_text, fg="green", bg="white")
     correct_listbox_label.grid(row=0, column=0)
 
-    gameover_stats_label = Label(stats_frame, text="Score - {} \nQuestion No. - {}".format(score, question_num), font=Karmatic_Arcade_big_text, bg="white")
+    gameover_stats_label = Label(stats_frame, text="Score - {} \nQuestions - {}".format(score, question_num), font=Karmatic_Arcade_big_text, bg="white")
     gameover_stats_label.grid(row=0, column=1, padx=40)
 
     incorrect_listbox_label = Label(stats_frame, text="Pokemon you forgot", font=Karmatic_Arcade_big_text, fg="orange", bg="white")
@@ -57,6 +57,7 @@ def game_over():
 
 # Actual Game
 def setup_game(difficulty):
+    global lives
 
     # Generate the question and alters the answers
     def generate_question():
@@ -74,9 +75,11 @@ def setup_game(difficulty):
         question_picture = Image.open("images/{}.png".format(question))
         # Resize the image using resize() method so it fits in frame
         resized_image = question_picture.resize((400, 400))
-        question_picture = ImageTk.PhotoImage(resized_image)
+        # Blurs Image if user is on Master difficulty
         if difficulty == "master":
-            
+            resized_image = resized_image.filter(ImageFilter.GaussianBlur(radius=15))
+        question_picture = ImageTk.PhotoImage(resized_image)
+        
 
         question_label.config(image=question_picture)
         question_label.image = question_picture
@@ -139,8 +142,9 @@ def setup_game(difficulty):
     for i in content:
         pokemon_list.append(i.strip())
 
+    # Difficulty condition (set lives to 1)
     if difficulty == "master":
-        lives = 1
+        lives = lives - 2
 
     #region Quiz Frame
 
@@ -213,7 +217,7 @@ def quit_game():
 
 # Setup Frames
 heading_frame = Frame(bg="white")
-heading_frame.grid(row=0, pady=10, sticky="news")
+heading_frame.grid(row=0, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
 starting_frame = Frame(bg="white")
@@ -226,7 +230,7 @@ difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
 quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
-quiz_frame.place(anchor="c", relx=.5, rely=0.6)
+quiz_frame.place(anchor="c", relx=.5, rely=0.58)
 
 gameover_frame = Frame(bg="white")
 gameover_frame.grid(row=1, column=0, sticky="news")
@@ -270,10 +274,10 @@ normal_label.grid(row=0, column=0, padx=20)
 master_label = Label(difficulty_button_frame, font=Karmatic_Arcade_subheading, text="Master", fg="purple",background="white")
 master_label.grid(row=0, column=1, padx=20)
 
-normal_button = Button(difficulty_button_frame, image=normal_icon, command=setup_game)
+normal_button = Button(difficulty_button_frame, image=normal_icon, command=lambda: setup_game("normal"))
 normal_button.grid(row=1, column=0, padx=25, pady=5)
 
-master_button = Button(difficulty_button_frame, image=master_icon, command=setup_game)
+master_button = Button(difficulty_button_frame, image=master_icon, command=lambda: setup_game("master"))
 master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 

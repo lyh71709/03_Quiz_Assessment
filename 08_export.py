@@ -1,26 +1,57 @@
 from tkinter import *
 import tkinter.font
 from turtle import screensize
-from PIL import Image, ImageTk,  ImageFilter
-import csv
-import time
+from PIL import Image, ImageTk, ImageFilter
+import os
 import random
 
-lives = 3
-score = 0
-question_num = 0
-
-correct_list = []
-incorrect_list = []
-
+# Game Over screen
 def game_over():
 
-    print("Correct: {}".format(correct_list))
-    print("Incorrect: {}".format(incorrect_list))
+    raise_frame(gameover_frame)
+
+    #region Gameover Frame
+
+    gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
+    gameover_label.grid(row=0, column=0, pady=15)
+
+    stats_frame = Label(gameover_frame, bg="white")
+    stats_frame.grid(row=1, pady=20)
+
+    correct_listbox_label = Label(stats_frame, text="   Pokemon you got    ", font=Karmatic_Arcade_big_text, fg="green", bg="white")
+    correct_listbox_label.grid(row=0, column=0)
+
+    gameover_stats_label = Label(stats_frame, text="Score - {} \nQuestions - {}".format(score, question_num), font=Karmatic_Arcade_big_text, bg="white")
+    gameover_stats_label.grid(row=0, column=1, padx=40)
+
+    incorrect_listbox_label = Label(stats_frame, text="Pokemon you forgot", font=Karmatic_Arcade_big_text, fg="orange", bg="white")
+    incorrect_listbox_label.grid(row=0, column=2)
+
+    correct_list_var = StringVar(value=correct_list)
+    correct_listbox = Listbox(stats_frame, listvariable=correct_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
+    correct_listbox.grid(row=1, column=0, pady=10)
+
+    sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
+    sad_pikachu_label.grid(row=1, column=1)
+
+    incorrect_list_var = StringVar(value=incorrect_list)
+    incorrect_listbox = Listbox(stats_frame, listvariable=incorrect_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
+    incorrect_listbox.grid(row=1, column=2)
+
+    export_button = Button(stats_frame, text="Export", font=Karmatic_Arcade_button, command=export)
+    export_button.grid(row=2, column=0, pady=10)
+
+    play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button, command=restart)
+    play_again_button.grid(row=2, column=1)
+
+    quit_button = Button(stats_frame, text="Quit", font=Karmatic_Arcade_button, command=quit_game)
+    quit_button.grid(row=2, column=2)
+    #endregion
 
 
 # Actual Game
-def setup_game():
+def setup_game(difficulty):
+    global lives
 
     # Generate the question and alters the answers
     def generate_question():
@@ -38,7 +69,11 @@ def setup_game():
         question_picture = Image.open("images/{}.png".format(question))
         # Resize the image using resize() method so it fits in frame
         resized_image = question_picture.resize((400, 400))
+        # Blurs Image if user is on Master difficulty
+        if difficulty == "master":
+            resized_image = resized_image.filter(ImageFilter.GaussianBlur(radius=15))
         question_picture = ImageTk.PhotoImage(resized_image)
+        
 
         question_label.config(image=question_picture)
         question_label.image = question_picture
@@ -83,7 +118,7 @@ def setup_game():
             incorrect_list.append(correct_button.cget('text'))
             lives -= 1
 
-        stats_label.config(text="Lives {}\nScore {}".format(lives, score))
+        game_stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
 
         if lives <= 0:
             game_over()
@@ -101,13 +136,17 @@ def setup_game():
     for i in content:
         pokemon_list.append(i.strip())
 
+    # Difficulty condition (set lives to 1)
+    if difficulty == "master":
+        lives = lives - 2
+
     #region Quiz Frame
 
     question_num_label = Label(quiz_frame, text="Question {}".format(question_num), font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0)
 
-    stats_label = Label(quiz_frame, text="Lives {}\nScore {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
-    stats_label.grid(row=0, column=1, padx=5)
+    game_stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
+    game_stats_label.grid(row=0, column=1, padx=5)
 
     question_label = Label(quiz_frame, background="white")
     question_label.grid(row=1, column=0, padx=20)
@@ -130,30 +169,45 @@ def setup_game():
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
     continue_button.grid(row=2, column=1)
 
-    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2)
+    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=game_over)
     quit_button.grid(row=2, column=0)
     #endregion
 
     buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
     generate_question()
 
+# Export Screen
+def export():
+    raise_frame(export_frame)
+    
+    #region Export Frame
 
-root = Tk()
+    export_label = Label(export_frame, text="Export Your Results!", font=Karmatic_Arcade_subheading, bg="white", width=100)
+    export_label.grid(row=0, pady=15)
 
-#region Variables
-# Setup my karmatic arcade font
-Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
-Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 30, weight = "bold")
-Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
-Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 15, weight = "normal")
+    export_instructions = Label(export_frame, text="Enter a filename in the box below and press the Save button to save your calculation history to a text file.", font=Karmatic_Arcade_button, justify=LEFT, width=200, bg="white", wrap=500)
+    export_instructions.grid(row=1, pady=20)
+    
+    export_entry = Entry(export_frame, font=Karmatic_Arcade_big_text, width=30, justify=CENTER, relief=SUNKEN, borderwidth=2)
+    export_entry.grid(row=2, pady=25)
 
-# Set up images
-pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
-normal_icon = PhotoImage(file="pokeball.gif")
-master_icon = PhotoImage(file="masterball.gif")
+    export_button_frame = Frame(export_frame, bg="white")
+    export_button_frame.grid(row=3, pady=25)
 
-#endregion
+    export_button = Button(export_button_frame, text="Export", font=Karmatic_Arcade_button)
+    export_button.grid(row=0, column=0, padx=50)
 
+    back_button = Button(export_button_frame, text="Back", font=Karmatic_Arcade_button)
+    back_button.grid(row=0, column=2, padx=50)
+    #endregion
+
+
+# Restarts the Whole Window 
+# only works if program file ends in .pyw
+# That's why play again will only work on final program
+def restart():
+    root.destroy()
+    os.startfile(".pyw")
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
@@ -161,9 +215,36 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
+
+root = Tk()
+
+#region Variables
+# Setup my karmatic arcade font
+Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
+Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 35, weight = "bold")
+Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
+Karmatic_Arcade_small_text = tkinter.font.Font(family = "Karmatic Arcade", size = 10, weight = "normal")
+Karmatic_Arcade_big_text = tkinter.font.Font(family = "Karmatic Arcade", size = 20, weight = "normal")
+
+lives = 3
+score = 0
+question_num = 0
+
+correct_list = []
+incorrect_list = []
+
+# Set up images
+pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
+normal_icon = PhotoImage(file="pokeball.gif")
+master_icon = PhotoImage(file="masterball.gif")
+sad_pikachu = PhotoImage(file="sadder_pikachu.gif")
+
+#endregion
+
+
 # Setup Frames
 heading_frame = Frame(bg="white")
-heading_frame.grid(row=0, pady=10, sticky="news")
+heading_frame.grid(row=0, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
 starting_frame = Frame(bg="white")
@@ -174,17 +255,17 @@ difficulty_frame = Frame(bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
 difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
-help_frame = Frame(bg="white")
-help_frame.grid(row=1, column=0, sticky="news")
-help_frame.place(anchor="c", relx=.5, rely=0.55)
-
 quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
-quiz_frame.place(anchor="c", relx=.5, rely=0.6)
+quiz_frame.place(anchor="c", relx=.5, rely=0.58)
 
 gameover_frame = Frame(bg="white")
 gameover_frame.grid(row=1, column=0, sticky="news")
 gameover_frame.place(anchor="c", relx=.5, rely=0.6)
+
+export_frame = Frame(bg="white")
+export_frame.grid(row=1, column=0, sticky="news")
+export_frame.place(anchor="c", relx=.5, rely=0.6)
 
 raise_frame(heading_frame)
 raise_frame(starting_frame)
@@ -201,7 +282,7 @@ pokemon_logo.grid(row=0, pady=20)
 starting_button_frame = Frame(starting_frame, background="white")
 starting_button_frame.grid(row=1, pady=10)
 
-help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, command=lambda: raise_frame(help_frame))
+help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10)
 help_button.grid(row=0, column=0, padx=10)
 
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(difficulty_frame))
@@ -224,28 +305,11 @@ normal_label.grid(row=0, column=0, padx=20)
 master_label = Label(difficulty_button_frame, font=Karmatic_Arcade_subheading, text="Master", fg="purple",background="white")
 master_label.grid(row=0, column=1, padx=20)
 
-normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, command=setup_game)
+normal_button = Button(difficulty_button_frame, image=normal_icon, command=lambda: setup_game("normal"))
 normal_button.grid(row=1, column=0, padx=25, pady=5)
 
-master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, command=quit_game)
+master_button = Button(difficulty_button_frame, image=master_icon, command=lambda: setup_game("master"))
 master_button.grid(row=1, column=1, padx=25, pady=5)
-#endregion
-
-#region Help Frame
-frame_set_size = Label(help_frame, width=(root.winfo_screenwidth()), bg="white")
-frame_set_size.grid(row=0)
-
-sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
-sub_heading_label.grid(row=1)
-
-help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_text, background="white",justify=CENTER)
-help_1_label.grid(row=2, pady=80)
-
-help_1_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_text, background="white",justify=CENTER)
-help_1_label.grid(row=3, pady=80)
-
-back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
-back_button.grid(row=4, pady=25)
 #endregion
 
 # main routine
