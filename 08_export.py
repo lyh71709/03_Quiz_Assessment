@@ -4,6 +4,7 @@ from turtle import screensize
 from PIL import Image, ImageTk, ImageFilter
 import os
 import random
+import re
 
 # Game Over screen
 def game_over():
@@ -178,27 +179,98 @@ def setup_game(difficulty):
 
 # Export Screen
 def export():
+
+    # Reused from practice assessment
+    def save_history():
+
+        # Regular Expression to check filename is valid
+        valid_char = "[A-Za-z0-9_]"
+        has_error = "no"
+
+        # Get filename from entry
+        filename = export_entry.get()
+
+        for letter in filename:
+            if re.match(valid_char, letter):
+                continue
+
+            elif letter == " ":
+                problem = "(No Spaces Allowed)"
+
+            else:
+                problem = "(No {}'s Allowed)".format(letter)
+            has_error = "yes"
+            break
+
+        if filename == "":
+            problem = "Can't Be Blank"
+            has_error = "yes"
+        
+        if has_error == "yes":
+            # Display error message
+            export_error_label.config(text="Invalid filename - {}".format(problem), fg="red")
+            # Change entry box background to pink
+            export_entry.config(bg="#ffafaf")
+
+        else:
+            # If there are no errors, generate text file and then close dialogue
+            # Add .txt suffix
+            filename = filename + ".txt"
+
+            # Create file to hold data
+            f = open(filename, "w+") # Press to pay respects
+
+            # Writes a title in the file
+            f.write("GAME HISTORY:\n\n")
+
+            # Writes the correct list
+            f.write("Pokemon You Got RIGHT!\n\n")
+            # Add new line at the end of each item
+            for item in correct_list:
+                f.write(item + "\n")
+
+            # Writes the correct list
+            f.write("Pokemon You Got WRONG!\n\n")
+            # Add new line at the end of each item
+            for item in incorrect_list:
+                f.write(item + "\n")
+
+            # Give feedback for user
+            export_error_label.config(text="History Exported Successfully", fg="green")
+
+
     raise_frame(export_frame)
+    export_error_label.config(text="")
     
     #region Export Frame
-
     export_label = Label(export_frame, text="Export Your Results!", font=Karmatic_Arcade_subheading, bg="white", width=100)
-    export_label.grid(row=0, pady=15)
+    export_label.grid(row=0, pady=30)
 
-    export_instructions = Label(export_frame, text="Enter a filename in the box below and press the Save button to save your calculation history to a text file.", font=Karmatic_Arcade_button, justify=LEFT, width=200, bg="white", wrap=500)
-    export_instructions.grid(row=1, pady=20)
+    export_content_frame = Frame(export_frame, bg="white")
+    export_content_frame.grid(row=1, pady=25)
+
+    export_picture = Label(export_content_frame, image=surprised_pikachu)
+    export_picture.grid(row=0, column=0, padx=15)
+
+    export_instructions = Label(export_content_frame, text="Enter a filename in the box below and press the Save button to save your calculation history to a text file.", font=Karmatic_Arcade_button, justify=LEFT, bg="white", wrap=500)
+    export_instructions.grid(row=0, column=1, padx=15, pady=25)
     
-    export_entry = Entry(export_frame, font=Karmatic_Arcade_big_text, width=30, justify=CENTER, relief=SUNKEN, borderwidth=2)
-    export_entry.grid(row=2, pady=25)
+    export_error_label = Label(export_frame, bg="white", font=Karmatic_Arcade_small_text, text="")
+    export_error_label.grid(row=2, pady=15)
+
+    export_entry = Entry(export_frame, font=Karmatic_Arcade_big_text, width=30, justify=CENTER, relief=GROOVE, borderwidth=4)
+    export_entry.grid(row=3, pady=25)
 
     export_button_frame = Frame(export_frame, bg="white")
-    export_button_frame.grid(row=3, pady=25)
+    export_button_frame.grid(row=4, pady=25)
 
-    export_button = Button(export_button_frame, text="Export", font=Karmatic_Arcade_button)
+    export_button = Button(export_button_frame, text="Export", font=Karmatic_Arcade_button, command=save_history)
     export_button.grid(row=0, column=0, padx=50)
 
-    back_button = Button(export_button_frame, text="Back", font=Karmatic_Arcade_button)
+    back_button = Button(export_button_frame, text="Back", font=Karmatic_Arcade_button, command=lambda: raise_frame(gameover_frame))
     back_button.grid(row=0, column=2, padx=50)
+
+    
     #endregion
 
 
@@ -237,7 +309,8 @@ incorrect_list = []
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-sad_pikachu = PhotoImage(file="sadder_pikachu.gif")
+sad_pikachu = PhotoImage(file="sad_pikachu.gif")
+surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 
 #endregion
 
