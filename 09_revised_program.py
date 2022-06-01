@@ -9,10 +9,48 @@ import re
 # Game Over screen
 def game_over():
 
+    for widgets in gameover_frame.winfo_children():
+        widgets.destroy()
+
     raise_frame(gameover_frame)
 
-    
+    #region Gameover Frame
 
+    gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
+    gameover_label.grid(row=0, column=0, pady=15)
+
+    stats_frame = Label(gameover_frame, bg="white")
+    stats_frame.grid(row=1, pady=20)
+
+    correct_listbox_label = Label(stats_frame, text="   Pokemon you got    ", font=Karmatic_Arcade_big_text, fg="green", bg="white")
+    correct_listbox_label.grid(row=0, column=0)
+
+    gameover_stats_label = Label(stats_frame, text="Score - {} \nQuestions - {}".format(score, question_num), font=Karmatic_Arcade_big_text, bg="white")
+    gameover_stats_label.grid(row=0, column=1, padx=40)
+
+    incorrect_listbox_label = Label(stats_frame, text="Pokemon you forgot", font=Karmatic_Arcade_big_text, fg="orange", bg="white")
+    incorrect_listbox_label.grid(row=0, column=2)
+
+    correct_list_var = StringVar(value=correct_list)
+    correct_listbox = Listbox(stats_frame, listvariable=correct_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
+    correct_listbox.grid(row=1, column=0, pady=10)
+
+    sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
+    sad_pikachu_label.grid(row=1, column=1)
+
+    incorrect_list_var = StringVar(value=incorrect_list)
+    incorrect_listbox = Listbox(stats_frame, listvariable=incorrect_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
+    incorrect_listbox.grid(row=1, column=2)
+
+    export_button = Button(stats_frame, text="Export", font=Karmatic_Arcade_button, command=export)
+    export_button.grid(row=2, column=0, pady=10)
+
+    play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button, command=restart)
+    play_again_button.grid(row=2, column=1)
+
+    quit_button = Button(stats_frame, text="Quit", font=Karmatic_Arcade_button, command=quit_game)
+    quit_button.grid(row=2, column=2)
+    #endregion
 
 # Actual Game
 def setup_game(difficulty):
@@ -98,6 +136,7 @@ def setup_game(difficulty):
         content = file.readlines()
 
     pokemon_list = []
+    # Strip unwanted characters from data
     for i in content:
         pokemon_list.append(i.strip())
 
@@ -110,7 +149,7 @@ def setup_game(difficulty):
     question_num_label = Label(quiz_frame, text="Question {}".format(question_num), font=Karmatic_Arcade_subheading, bg="white")
     question_num_label.grid(row=0, column=0)
 
-    game_stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}".format(lives, score), font=Karmatic_Arcade_subheading, bg="white")
+    game_stats_label = Label(quiz_frame, text="Lives - {}\nScore - {}".format(lives, score), font=Karmatic_Arcade_big_text, bg="white")
     game_stats_label.grid(row=0, column=1, padx=5)
 
     question_label = Label(quiz_frame, background="white")
@@ -154,6 +193,7 @@ def export():
         # Get filename from entry
         filename = export_entry.get()
 
+        # Checks if there is an invalid character in user input
         for letter in filename:
             if re.match(valid_char, letter):
                 continue
@@ -202,6 +242,8 @@ def export():
             # Give feedback for user
             export_error_label.config(text="History Exported Successfully", fg="green")
 
+    for widgets in export_frame.winfo_children():
+      widgets.destroy()
 
     raise_frame(export_frame)
     
@@ -235,6 +277,30 @@ def export():
 
     export_error_label.config(text="")
     
+    #endregion
+
+# Help Screen
+def help_game():
+    for widgets in help_frame.winfo_children():
+      widgets.destroy()
+
+    raise_frame(help_frame)
+    
+    #region Help Frame
+    frame_set_size = Label(help_frame, width=(root.winfo_screenwidth()), bg="white")
+    frame_set_size.grid(row=0)
+
+    sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
+    sub_heading_label.grid(row=1)
+
+    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_1_label.grid(row=2, pady=80)
+
+    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_2_label.grid(row=3, pady=80)
+
+    back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
+    back_button.grid(row=4, pady=25)
     #endregion
 
 
@@ -292,9 +358,13 @@ difficulty_frame = Frame(bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
 difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
+help_frame = Frame(bg="white")
+help_frame.grid(row=1, column=0, sticky="news")
+help_frame.place(anchor="c", relx=.5, rely=0.6)
+
 quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
-quiz_frame.place(anchor="c", relx=.5, rely=0.58)
+quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
 gameover_frame = Frame(bg="white")
 gameover_frame.grid(row=1, column=0, sticky="news")
@@ -312,6 +382,23 @@ heading_label = Label(heading_frame, font=Karmatic_Arcade_heading, text="Who's T
 heading_label.grid(row=0)
 #endregion
 
+# #region Starting Frame
+# pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white", width=1000)
+# pokemon_logo.grid(row=0, pady=20)
+
+# starting_button_frame = Frame(starting_frame, background="white")
+# starting_button_frame.grid(row=1, pady=10)
+
+# help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, command=help)
+# help_button.grid(row=0, column=0, padx=10)
+
+# play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(difficulty_frame))
+# play_button.grid(row=0, column=1, padx=10)
+
+# quit_button = Button(starting_button_frame, text="Quit", font=Karmatic_Arcade_button, width=10, command=quit_game)
+# quit_button.grid(row=0, column=2, padx=10)
+# #endregion
+
 #region Starting Frame
 pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white", width=2000)
 pokemon_logo.grid(row=0, pady=20)
@@ -319,7 +406,7 @@ pokemon_logo.grid(row=0, pady=20)
 starting_button_frame = Frame(starting_frame, background="white")
 starting_button_frame.grid(row=1, pady=20)
 
-help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, height=2)
+help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, height=2, command=help_game)
 help_button.grid(row=0, column=0, padx=10)
 
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, height=2, command=lambda:raise_frame(difficulty_frame))
@@ -347,44 +434,6 @@ normal_button.grid(row=1, column=0, padx=25, pady=5)
 
 master_button = Button(difficulty_button_frame, image=master_icon, command=lambda: setup_game("master"))
 master_button.grid(row=1, column=1, padx=25, pady=5)
-#endregion
-
-#region Gameover Frame
-
-gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
-gameover_label.grid(row=0, column=0, pady=15)
-
-stats_frame = Label(gameover_frame, bg="white")
-stats_frame.grid(row=1, pady=20)
-
-correct_listbox_label = Label(stats_frame, text="   Pokemon you got    ", font=Karmatic_Arcade_big_text, fg="green", bg="white")
-correct_listbox_label.grid(row=0, column=0)
-
-gameover_stats_label = Label(stats_frame, text="Score - {} \nQuestions - {}".format(score, question_num), font=Karmatic_Arcade_big_text, bg="white")
-gameover_stats_label.grid(row=0, column=1, padx=40)
-
-incorrect_listbox_label = Label(stats_frame, text="Pokemon you forgot", font=Karmatic_Arcade_big_text, fg="orange", bg="white")
-incorrect_listbox_label.grid(row=0, column=2)
-
-correct_list_var = StringVar(value=correct_list)
-correct_listbox = Listbox(stats_frame, listvariable=correct_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
-correct_listbox.grid(row=1, column=0, pady=10)
-
-sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
-sad_pikachu_label.grid(row=1, column=1)
-
-incorrect_list_var = StringVar(value=incorrect_list)
-incorrect_listbox = Listbox(stats_frame, listvariable=incorrect_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
-incorrect_listbox.grid(row=1, column=2)
-
-export_button = Button(stats_frame, text="Export", font=Karmatic_Arcade_button, command=export)
-export_button.grid(row=2, column=0, pady=10)
-
-play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button, command=restart)
-play_again_button.grid(row=2, column=1)
-
-quit_button = Button(stats_frame, text="Quit", font=Karmatic_Arcade_button, command=quit_game)
-quit_button.grid(row=2, column=2)
 #endregion
 
 # main routine

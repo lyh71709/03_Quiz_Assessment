@@ -98,6 +98,7 @@ def setup_game():
         content = file.readlines()
 
     pokemon_list = []
+    # Strip unwanted characters from data
     for i in content:
         pokemon_list.append(i.strip())
 
@@ -241,8 +242,8 @@ sub_heading_label.grid(row=1)
 help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_text, background="white",justify=CENTER)
 help_1_label.grid(row=2, pady=80)
 
-help_1_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_text, background="white",justify=CENTER)
-help_1_label.grid(row=3, pady=80)
+help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_text, background="white",justify=CENTER)
+help_2_label.grid(row=3, pady=80)
 
 back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
 back_button.grid(row=4, pady=25)

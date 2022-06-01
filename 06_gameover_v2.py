@@ -134,6 +134,7 @@ def setup_game():
         content = file.readlines()
 
     pokemon_list = []
+    # Strip unwanted characters from data
     for i in content:
         pokemon_list.append(i.strip())
 

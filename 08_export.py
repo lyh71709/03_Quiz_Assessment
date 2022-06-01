@@ -134,6 +134,7 @@ def setup_game(difficulty):
         content = file.readlines()
 
     pokemon_list = []
+    # Strip unwanted characters from data
     for i in content:
         pokemon_list.append(i.strip())
 
@@ -190,6 +191,7 @@ def export():
         # Get filename from entry
         filename = export_entry.get()
 
+        # Checks if there is an invalid character in user input
         for letter in filename:
             if re.match(valid_char, letter):
                 continue
