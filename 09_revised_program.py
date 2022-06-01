@@ -382,23 +382,6 @@ heading_label = Label(heading_frame, font=Karmatic_Arcade_heading, text="Who's T
 heading_label.grid(row=0)
 #endregion
 
-# #region Starting Frame
-# pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white", width=1000)
-# pokemon_logo.grid(row=0, pady=20)
-
-# starting_button_frame = Frame(starting_frame, background="white")
-# starting_button_frame.grid(row=1, pady=10)
-
-# help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, command=help)
-# help_button.grid(row=0, column=0, padx=10)
-
-# play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(difficulty_frame))
-# play_button.grid(row=0, column=1, padx=10)
-
-# quit_button = Button(starting_button_frame, text="Quit", font=Karmatic_Arcade_button, width=10, command=quit_game)
-# quit_button.grid(row=0, column=2, padx=10)
-# #endregion
-
 #region Starting Frame
 pokemon_logo = Label(starting_frame, image=pokeball_icon, background="white", width=2000)
 pokemon_logo.grid(row=0, pady=20)

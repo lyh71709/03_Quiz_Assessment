@@ -158,16 +158,16 @@ def setup_game(difficulty):
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=40)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="ridge", borderwidth=5)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="sunken", borderwidth=3)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
     answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="raised", borderwidth=3)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
@@ -234,7 +234,7 @@ def export():
                 f.write(item + "\n")
 
             # Writes the correct list
-            f.write("Pokemon You Got WRONG!\n\n")
+            f.write("\nPokemon You Got WRONG!\n\n")
             # Add new line at the end of each item
             for item in incorrect_list:
                 f.write(item + "\n")
