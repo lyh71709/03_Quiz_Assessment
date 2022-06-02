@@ -1,58 +1,93 @@
 from tkinter import *
 import tkinter.font
-from turtle import heading, screensize
-from PIL import ImageFilter
+from turtle import screensize
+from PIL import Image, ImageTk,  ImageFilter
+import csv
+import time
+import random
+
+# Actual Game
+def play_game():
+    raise_frame(quiz_frame)
+
+    #region Quiz Frame
+    question_num_label = Label(quiz_frame, text="Question X", font=Karmatic_Arcade_subheading, bg="white")
+    question_num_label.grid(row=0, column=0, pady=10)
+
+    stats_label = Label(quiz_frame, text="Lives - X\nScore - X", font=Karmatic_Arcade_subheading, bg="white")
+    stats_label.grid(row=0, column=1, padx=10, pady=10)
+
+    question_label = Label(quiz_frame, width=475, height=475, image=test, background="red")
+    question_label.grid(row=1, column=0, pady=50, padx=30)
+
+    answer_button_frame = Frame(quiz_frame)
+    answer_button_frame.grid(row=1, column=1, pady=30, padx=50)
+
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_a_button.grid(row=0, column=0, pady=20, padx=20)
+
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_b_button.grid(row=0, column=1, pady=20, padx=20)
+
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_c_button.grid(row=1, column=0, pady=20, padx=20)
+
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_d_button.grid(row=1, column=1, pady=20, padx=20)
+    #endregion
 
 root = Tk()
 
-# Moves frame to the top
-def raise_frame(frame):
-    frame.tkraise()
-
-# Exits game
-def quit_game():
-        root.destroy()
-
-def myfunction(event):
-            canvas.configure(scrollregion=canvas.bbox("all"), width=root.winfo_screenwidth(), height=root.winfo_screenheight())
-
+#region Variables
 # Setup my karmatic arcade font
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 60, weight = "bold")
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 40, weight = "bold")
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 18, weight = "normal")
 Karmatic_Arcade_text = tkinter.font.Font(family = "Karmatic Arcade", size = 12, weight = "normal")
 
-# Setting up images
+# Set up images
 pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
+test = PhotoImage(file="pokeball_icon.gif")
+# Resize the image using resize() method
 
+pokemon_list = []
+dataset = open("pokemon.csv")
+csvreader = csv.reader(dataset)
+for row in csvreader:
+    pokemon_list.append(row)
+dataset.close()
+#endregion
 
-canvas = Canvas(root, bg="white")
-canvas.grid(row=0, column=0, sticky="NEWS")
+# Brings frame to the top
+def raise_frame(frame):
+    frame.tkraise()
 
-myscrollbar=Scrollbar(root,orient="vertical",command=canvas.yview)
-canvas.configure(yscrollcommand=myscrollbar.set)
-myscrollbar.grid(row=0, column=1, sticky="NS")
+# Exits Game
+def quit_game():
+        root.destroy()
 
 # Setup Frames
-heading_frame = Frame(canvas, bg="white")
+heading_frame = Frame(bg="white")
 heading_frame.grid(row=0, pady=10, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
-heading_frame.bind("<Configure>",myfunction)
-
-starting_frame = Frame(canvas, pady=80, bg="white")
+starting_frame = Frame(pady=80, bg="white")
 starting_frame.grid(row=1, column=0, sticky="news")
 starting_frame.place(anchor="c", relx=.5, rely=0.6)
 
-difficulty_frame = Frame(canvas, pady=80, bg="white")
+difficulty_frame = Frame(pady=80, bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
 difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
-help_frame = Frame(canvas, pady=30, bg="white")
+help_frame = Frame(pady=30, bg="white")
 help_frame.grid(row=1, column=0, sticky="news")
-help_frame.place(anchor="c", relx=.5, rely=0.6)
+help_frame.place(anchor="c", relx=.5, rely=0.62)
+
+quiz_frame = Frame(bg="white")
+quiz_frame.grid(row=1, column=0, sticky="news")
+quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
 raise_frame(heading_frame)
 raise_frame(starting_frame)
@@ -63,6 +98,7 @@ heading_label.grid(row=0)
 #endregion
 
 #region Starting Frame
+
 frame_set_size = Label(starting_frame, width=(root.winfo_screenwidth()), bg="white")
 frame_set_size.grid(row=0)
 
@@ -72,7 +108,7 @@ pokemon_logo.grid(row=1, pady=50)
 starting_button_frame = Frame(starting_frame, pady=50, background="white")
 starting_button_frame.grid(row=2)
 
-help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(help_frame))
+help_button = Button(starting_button_frame, text="Help", font=Karmatic_Arcade_button, width=10, command=lambda: raise_frame(help_frame))
 help_button.grid(row=0, column=0, padx=10)
 
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(difficulty_frame))
@@ -95,7 +131,7 @@ normal_label.grid(row=0, column=0, padx=20)
 master_label = Label(difficulty_button_frame, font=Karmatic_Arcade_subheading, text="Master", fg="purple",background="white")
 master_label.grid(row=0, column=1, padx=20)
 
-normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button)
+normal_button = Button(difficulty_button_frame, image=normal_icon, font=Karmatic_Arcade_button, command=play_game)
 normal_button.grid(row=1, column=0, padx=25, pady=5)
 
 master_button = Button(difficulty_button_frame, image=master_icon, font=Karmatic_Arcade_button, command=quit_game)
@@ -119,11 +155,11 @@ back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, widt
 back_button.grid(row=4, pady=50)
 #endregion
 
-
 # main routine
 root.title("Who's That Pokemon?")
 root.geometry("1920x1080")
 root.config(background="white")
 # Makes game fullscreen
 root.state('zoomed')
+# root.attributes('-fullscreen', True)
 root.mainloop()
