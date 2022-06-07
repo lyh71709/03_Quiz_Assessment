@@ -189,7 +189,7 @@ Karmatic_Arcade_big_text = tkinter.font.Font(family = "Karmatic Arcade", size = 
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
-sad_pikachu = PhotoImage(file="sadder_pikachu.gif")
+sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 
 
 #endregion

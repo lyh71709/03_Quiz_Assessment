@@ -293,11 +293,11 @@ def help_game():
     sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
     sub_heading_label.grid(row=1)
 
-    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_1_label.grid(row=2, pady=80)
+    help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_1_label.grid(row=2, pady=20)
 
-    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_2_label.grid(row=3, pady=80)
+    help_2_label = Label(help_frame, text="At the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file. \n\nEnjoy and have fun!", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_2_label.grid(row=3, pady=20)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=4, pady=25)
@@ -423,6 +423,6 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
-# Makes game fullscreen
-# root.state('zoomed')
+#Makes game fullscreen
+root.state('zoomed')
 root.mainloop()
