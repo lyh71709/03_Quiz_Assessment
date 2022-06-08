@@ -1,3 +1,7 @@
+# Answer buttons function
+# Generates another question when one is answered
+# b - Automated timer method
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

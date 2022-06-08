@@ -1,3 +1,7 @@
+# Discovered that a tkinter doesn't automatically resize to fit larger programs on smaller screens 
+# So in order to fit it on at least a 1280x720 screen I have to resize the program
+# Also discovered custom fonts must be installed on user's system but tkinter defaults fonts to Arial so its fine to leave it
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

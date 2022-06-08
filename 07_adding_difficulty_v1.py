@@ -1,3 +1,6 @@
+# Get hard difficulty working
+# Blur images and set lives to 1
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

@@ -1,3 +1,6 @@
+# V4
+# Implement raise frame instead of classes
+
 from tkinter import *
 import tkinter.font
 from turtle import heading, screensize
@@ -13,8 +16,6 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
-def myfunction(event):
-            canvas.configure(scrollregion=canvas.bbox("all"), width=root.winfo_screenwidth(), height=root.winfo_screenheight())
 
 # Setup my karmatic arcade font
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 60, weight = "bold")
@@ -27,30 +28,20 @@ pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 
-
-canvas = Canvas(root, bg="white")
-canvas.grid(row=0, column=0, sticky="NEWS")
-
-myscrollbar=Scrollbar(root,orient="vertical",command=canvas.yview)
-canvas.configure(yscrollcommand=myscrollbar.set)
-myscrollbar.grid(row=0, column=1, sticky="NS")
-
 # Setup Frames
-heading_frame = Frame(canvas, bg="white")
+heading_frame = Frame(bg="white")
 heading_frame.grid(row=0, pady=10, sticky="news")
 heading_frame.place(anchor="c", relx=.5, rely=0.1)
 
-heading_frame.bind("<Configure>",myfunction)
-
-starting_frame = Frame(canvas, pady=80, bg="white")
+starting_frame = Frame(pady=80, bg="white")
 starting_frame.grid(row=1, column=0, sticky="news")
 starting_frame.place(anchor="c", relx=.5, rely=0.6)
 
-difficulty_frame = Frame(canvas, pady=80, bg="white")
+difficulty_frame = Frame(pady=80, bg="white")
 difficulty_frame.grid(row=1, column=0, sticky="news")
 difficulty_frame.place(anchor="c", relx=.5, rely=0.6)
 
-help_frame = Frame(canvas, pady=30, bg="white")
+help_frame = Frame(pady=30, bg="white")
 help_frame.grid(row=1, column=0, sticky="news")
 help_frame.place(anchor="c", relx=.5, rely=0.62)
 

@@ -1,3 +1,6 @@
+# Load in CSV
+# Randomly select pokemon and configure appropriately
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize
@@ -29,6 +32,7 @@ def setup_game():
 
         # Selects one button to be the actual answer
         answer_button = random.choice(buttons)
+        # Changes bg to red to ensure that the program actually know which button is correct
         answer_button.config(text=question.title(), bg="red")
         raise_frame(quiz_frame)
 

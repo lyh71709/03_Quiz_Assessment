@@ -1,3 +1,7 @@
+# V2
+# Make buttons functioning and add Difficulty frame
+# Make game fullscreen
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

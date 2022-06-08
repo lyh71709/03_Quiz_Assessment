@@ -1,3 +1,6 @@
+# V2
+# Account for question repeats, so now the pokemon is removed from the list after it is used.
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

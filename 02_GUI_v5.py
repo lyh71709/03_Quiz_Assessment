@@ -1,3 +1,6 @@
+# V5
+# Add in Game frame
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize
@@ -50,7 +53,6 @@ pokeball_icon = PhotoImage(file="pokeball_icon.gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 test = PhotoImage(file="pokeball_icon.gif")
-# Resize the image using resize() method
 
 pokemon_list = []
 dataset = open("pokemon.csv")

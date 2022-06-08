@@ -1,3 +1,5 @@
+# Basic starting frame with images
+
 from tkinter import *
 import tkinter.font
 

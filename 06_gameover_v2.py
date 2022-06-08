@@ -1,3 +1,6 @@
+# V2
+# Add in an image to fill in space and make frame look more aesthetically pleasing
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

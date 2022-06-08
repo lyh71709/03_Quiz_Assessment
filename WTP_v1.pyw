@@ -1,3 +1,7 @@
+# Final Program
+# V1 - Make game restart functional as well as add help instructions
+# 
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize
@@ -296,7 +300,7 @@ def help_game():
     help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
     help_1_label.grid(row=2, pady=20)
 
-    help_2_label = Label(help_frame, text="At the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file. \n\nEnjoy and have fun!", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_2_label = Label(help_frame, text="At the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file. \n\nThe game uses a custom font named Karmatic Arcade but using Arial is fine as well. If you already have Karmatic Arcade then skip this paragraph. To install use link (https://www.dafont.com/karmatic-arcade.font) \n\nEnjoy and have fun!", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
     help_2_label.grid(row=3, pady=20)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))

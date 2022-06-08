@@ -1,4 +1,6 @@
-# Eliminates all the widgets when opening a new frame to stop repeated creation of widgets stacking
+# Final Program
+# V1 - Make game restart functional as well as add help instructions
+# 
 
 from tkinter import *
 import tkinter.font
@@ -160,16 +162,16 @@ def setup_game(difficulty):
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=40)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
-    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
@@ -236,7 +238,7 @@ def export():
                 f.write(item + "\n")
 
             # Writes the correct list
-            f.write("Pokemon You Got WRONG!\n\n")
+            f.write("\nPokemon You Got WRONG!\n\n")
             # Add new line at the end of each item
             for item in incorrect_list:
                 f.write(item + "\n")
@@ -295,11 +297,11 @@ def help_game():
     sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
     sub_heading_label.grid(row=1)
 
-    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_1_label.grid(row=2, pady=80)
+    help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_1_label.grid(row=2, pady=20)
 
-    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_2_label.grid(row=3, pady=80)
+    help_2_label = Label(help_frame, text="At the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file. \n\nThe game uses a custom font named Karmatic Arcade but using Arial is fine as well. If you already have Karmatic Arcade then skip this paragraph. To install use link (https://www.dafont.com/karmatic-arcade.font) \n\nEnjoy and have fun!", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_2_label.grid(row=3, pady=20)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=4, pady=25)
@@ -311,7 +313,7 @@ def help_game():
 # That's why play again will only work on final program
 def restart():
     root.destroy()
-    os.startfile(".pyw")
+    os.startfile("WTP.pyw")
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
@@ -425,6 +427,6 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
-# Makes game fullscreen
-# root.state('zoomed')
+#Makes game fullscreen
+root.state('zoomed')
 root.mainloop()

@@ -1,3 +1,6 @@
+# Get exporting to txt file working
+# Mainly recycled from practice
+
 from tkinter import *
 import tkinter.font
 from turtle import screensize

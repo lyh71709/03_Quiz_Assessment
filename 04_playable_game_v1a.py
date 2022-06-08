@@ -1,6 +1,9 @@
+# Answer buttons function
+# Generates another question when one is answered
+# a - Continue Button method
+
 from tkinter import *
 import tkinter.font
-from turtle import screensize
 from PIL import Image, ImageTk,  ImageFilter
 import csv
 import time
