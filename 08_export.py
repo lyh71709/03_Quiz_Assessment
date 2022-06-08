@@ -184,6 +184,8 @@ def export():
     # Reused from practice assessment
     def save_history():
 
+        export_entry.config(bg="white")
+
         # Regular Expression to check filename is valid
         valid_char = "[A-Za-z0-9_]"
         has_error = "no"

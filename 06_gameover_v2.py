@@ -47,7 +47,7 @@ def game_over():
     export_button = Button(stats_frame, text="Export", font=Karmatic_Arcade_button)
     export_button.grid(row=2, column=0, pady=10)
 
-    play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button, command=restart)
+    play_again_button = Button(stats_frame, text="Play Again", font=Karmatic_Arcade_button)
     play_again_button.grid(row=2, column=1)
 
     quit_button = Button(stats_frame, text="Quit", font=Karmatic_Arcade_button, command=quit_game)
