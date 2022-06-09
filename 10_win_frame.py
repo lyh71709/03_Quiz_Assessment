@@ -1,6 +1,5 @@
-# Final Program
-# V1 - Make game restart functional as well as add help instructions
-# 
+# Add a win screen
+# Allow the game to finish no matter how rare
 
 from tkinter import *
 import tkinter.font
@@ -11,7 +10,7 @@ import random
 import re
 
 # Game Over screen
-def game_over():
+def game_over(win_or_loss):
 
     for widgets in gameover_frame.winfo_children():
         widgets.destroy()
@@ -22,6 +21,8 @@ def game_over():
 
     gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
     gameover_label.grid(row=0, column=0, pady=15)
+    if win_or_loss == "win":
+        gameover_label.config(text="Congratulations!", fg="blue")
 
     stats_frame = Label(gameover_frame, bg="white")
     stats_frame.grid(row=1, pady=20)
@@ -41,6 +42,8 @@ def game_over():
 
     sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
     sad_pikachu_label.grid(row=1, column=1)
+    if win_or_loss == "win":
+        sad_pikachu_label.config(image=happy_pikachu)
 
     incorrect_list_var = StringVar(value=incorrect_list)
     incorrect_listbox = Listbox(stats_frame, listvariable=incorrect_list_var, font=Karmatic_Arcade_small_text, height=20, borderwidth=0, highlightthickness=0.5)
@@ -70,8 +73,11 @@ def setup_game(difficulty):
         question_num = question_num + 1
         question_num_label.config(text="Question {}".format(question_num))
 
+        if not possible_questions:
+            game_over("win")
+
         # Randomly select pokemon
-        question = random.choice(pokemon_list)
+        question = random.choice(possible_questions)
         # Finds the image of pokemon
         question_picture = Image.open("images/{}.png".format(question))
         # Resize the image using resize() method so it fits in frame
@@ -81,16 +87,25 @@ def setup_game(difficulty):
             resized_image = resized_image.filter(ImageFilter.GaussianBlur(radius=15))
         question_picture = ImageTk.PhotoImage(resized_image)
         
-
+        # Update picture with the picture of chosen pokemon
         question_label.config(image=question_picture)
         question_label.image = question_picture
 
-        # Removes the pokemon from list so we won't have duplicates
-        pokemon_list.remove(question)
+        # Removes the pokemon from the possible questions list so we won't have duplicate questions
+        possible_questions.remove(question)
 
-        # Change the buttons back to default
-        for i in buttons:
-            i.config(text="{}".format(random.choice(pokemon_list)).title(), bg="SystemButtonFace")
+        # Removes the question from pokemon list to remove the possibility of a non correct button to have the chosen pokemon's name on it
+        pokemon_list.remove(question)
+        # Selects 4 random pokemon without repeats
+        possible_button_names = random.sample(pokemon_list, 4)
+        # Re adds the chosen pokemon's name to the list
+        pokemon_list.append(question)
+
+        # Bg set to "SystemButtonFace" to restore default
+        answer_a_button.config(text="{}".format(possible_button_names[0]).title(), bg="SystemButtonFace")
+        answer_b_button.config(text="{}".format(possible_button_names[1]).title(), bg="SystemButtonFace")
+        answer_c_button.config(text="{}".format(possible_button_names[2]).title(), bg="SystemButtonFace")
+        answer_d_button.config(text="{}".format(possible_button_names[3]).title(), bg="SystemButtonFace")
 
         # Selects one button to be the actual answer
         answer_button = random.choice(buttons)
@@ -128,7 +143,7 @@ def setup_game(difficulty):
         game_stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
 
         if lives <= 0:
-            game_over()
+            game_over("win")
 
 
         # Makes continue button reappear
@@ -139,10 +154,12 @@ def setup_game(difficulty):
     with open('pokemon.csv') as file:
         content = file.readlines()
 
-    pokemon_list = []
-    # Strip unwanted characters from data
-    for i in content:
-        pokemon_list.append(i.strip())
+    pokemon_list = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
+    possible_questions = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
+    # pokemon_list = []
+    # # Strip unwanted characters from data
+    # for i in content:
+    #     pokemon_list.append(i.strip())
 
     # Difficulty condition (set lives to 1)
     if difficulty == "master":
@@ -162,22 +179,22 @@ def setup_game(difficulty):
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=40)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
-    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
     continue_button.grid(row=2, column=1)
 
-    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=game_over)
+    quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=lambda: game_over("loss"))
     quit_button.grid(row=2, column=0)
     #endregion
 
@@ -238,7 +255,7 @@ def export():
                 f.write(item + "\n")
 
             # Writes the correct list
-            f.write("\nPokemon You Got WRONG!\n\n")
+            f.write("Pokemon You Got WRONG!\n\n")
             # Add new line at the end of each item
             for item in incorrect_list:
                 f.write(item + "\n")
@@ -297,11 +314,11 @@ def help_game():
     sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
     sub_heading_label.grid(row=1)
 
-    help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
-    help_1_label.grid(row=2, pady=20)
+    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_1_label.grid(row=2, pady=80)
 
-    help_2_label = Label(help_frame, text="At the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file. \n\nThe game uses a custom font named Karmatic Arcade but using Arial is fine as well. If you already have Karmatic Arcade then skip this paragraph. To install use link (https://www.dafont.com/karmatic-arcade.font) \n\nEnjoy and have fun!", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
-    help_2_label.grid(row=3, pady=20)
+    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_2_label.grid(row=3, pady=80)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=4, pady=25)
@@ -313,7 +330,7 @@ def help_game():
 # That's why play again will only work on final program
 def restart():
     root.destroy()
-    os.startfile("WTP.pyw")
+    os.startfile(".pyw")
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
@@ -345,7 +362,7 @@ normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
-
+happy_pikachu = PhotoImage(file="happy_pikachu.gif")
 #endregion
 
 
@@ -427,6 +444,6 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
-#Makes game fullscreen
-root.state('zoomed')
+# Makes game fullscreen
+# root.state('zoomed')
 root.mainloop()
