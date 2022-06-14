@@ -1,5 +1,6 @@
-# Add a win screen
-# Allow the game to finish no matter how rare
+# Final Program
+# V1 - Make game restart functional as well as add help instructions
+# V2 - Add in win frame
 
 from tkinter import *
 import tkinter.font
@@ -18,7 +19,6 @@ def game_over(win_or_loss):
     raise_frame(gameover_frame)
 
     #region Gameover Frame
-
     gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
     gameover_label.grid(row=0, column=0, pady=15)
     if win_or_loss == "win":
@@ -73,52 +73,55 @@ def setup_game(difficulty):
         question_num = question_num + 1
         question_num_label.config(text="Question {}".format(question_num))
 
+        # Checks if possible_questions is empty
         if not possible_questions:
             game_over("win")
 
-        # Randomly select pokemon
-        question = random.choice(possible_questions)
-        # Finds the image of pokemon
-        question_picture = Image.open("images/{}.png".format(question))
-        # Resize the image using resize() method so it fits in frame
-        resized_image = question_picture.resize((400, 400))
-        # Blurs Image if user is on Master difficulty
-        if difficulty == "master":
-            resized_image = resized_image.filter(ImageFilter.GaussianBlur(radius=15))
-        question_picture = ImageTk.PhotoImage(resized_image)
+        else:
+            # Randomly select pokemon
+            question = random.choice(possible_questions)
+            # Finds the image of pokemon
+            question_picture = Image.open("images/{}.png".format(question))
+            # Resize the image using resize() method so it fits in frame
+            resized_image = question_picture.resize((400, 400))
+       
+            # Blurs Image if user is on Master difficulty
+            if difficulty == "master":
+                resized_image = resized_image.filter(ImageFilter.GaussianBlur(radius=15))
+            question_picture = ImageTk.PhotoImage(resized_image)
         
-        # Update picture with the picture of chosen pokemon
-        question_label.config(image=question_picture)
-        question_label.image = question_picture
+            # Update picture with the picture of chosen pokemon
+            question_label.config(image=question_picture)
+            question_label.image = question_picture
 
-        # Removes the pokemon from the possible questions list so we won't have duplicate questions
-        possible_questions.remove(question)
+            # Removes the pokemon from the possible questions list so we won't have duplicate questions
+            possible_questions.remove(question)
 
-        # Removes the question from pokemon list to remove the possibility of a non correct button to have the chosen pokemon's name on it
-        pokemon_list.remove(question)
-        # Selects 4 random pokemon without repeats
-        possible_button_names = random.sample(pokemon_list, 4)
-        # Re adds the chosen pokemon's name to the list
-        pokemon_list.append(question)
+            # Removes the question from pokemon list to remove the possibility of a non correct button to have the chosen pokemon's name on it
+            pokemon_list.remove(question)
+            # Selects 4 random pokemon without repeats
+            possible_button_names = random.sample(pokemon_list, 4)
+            # Re adds the chosen pokemon's name to the list
+            pokemon_list.append(question)
 
-        # Bg set to "SystemButtonFace" to restore default
-        answer_a_button.config(text="{}".format(possible_button_names[0]).title(), bg="SystemButtonFace")
-        answer_b_button.config(text="{}".format(possible_button_names[1]).title(), bg="SystemButtonFace")
-        answer_c_button.config(text="{}".format(possible_button_names[2]).title(), bg="SystemButtonFace")
-        answer_d_button.config(text="{}".format(possible_button_names[3]).title(), bg="SystemButtonFace")
+            # Bg set to "SystemButtonFace" to restore default and replace the text on button with randomly generated name
+            answer_a_button.config(text="{}".format(possible_button_names[0]).title(), bg="SystemButtonFace")
+            answer_b_button.config(text="{}".format(possible_button_names[1]).title(), bg="SystemButtonFace")
+            answer_c_button.config(text="{}".format(possible_button_names[2]).title(), bg="SystemButtonFace")
+            answer_d_button.config(text="{}".format(possible_button_names[3]).title(), bg="SystemButtonFace")
 
-        # Selects one button to be the actual answer
-        answer_button = random.choice(buttons)
-        answer_button.config(text=question.title())
-        raise_frame(quiz_frame)
-        # Gets rid of continue_button
-        continue_button.grid_forget()
+            # Selects one button to be the actual answer
+            answer_button = random.choice(buttons)
+            answer_button.config(text=question.title())
+            raise_frame(quiz_frame)
+            # Gets rid of continue_button
+            continue_button.grid_forget()
 
-        # Bind all buttons for answer function
-        answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
-        answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
-        answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
-        answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
+            # Bind all buttons for answer function
+            answer_a_button.config(command= lambda: answer_question(answer_a_button, answer_button))
+            answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
+            answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
+            answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
 
     # When user answers question
     def answer_question(chosen_button, correct_button):
@@ -143,8 +146,7 @@ def setup_game(difficulty):
         game_stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
 
         if lives <= 0:
-            game_over("win")
-
+            game_over("loss")
 
         # Makes continue button reappear
         continue_button.grid(row=2, column=1)
@@ -153,13 +155,13 @@ def setup_game(difficulty):
     # Use CSV to make a list
     with open('pokemon.csv') as file:
         content = file.readlines()
-
-    pokemon_list = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
-    possible_questions = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
-    # pokemon_list = []
-    # # Strip unwanted characters from data
-    # for i in content:
-    #     pokemon_list.append(i.strip())
+    
+    pokemon_list = []
+    possible_questions = []
+    # Strip unwanted characters from data
+    for i in content:
+        pokemon_list.append(i.strip())
+        possible_questions.append(i.strip())
 
     # Difficulty condition (set lives to 1)
     if difficulty == "master":
@@ -179,16 +181,16 @@ def setup_game(difficulty):
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=40)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
-    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
@@ -198,6 +200,7 @@ def setup_game(difficulty):
     quit_button.grid(row=2, column=0)
     #endregion
 
+    # Set up a list of buttons for later use
     buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
     generate_question()
 
@@ -324,13 +327,13 @@ def help_game():
     back_button.grid(row=4, pady=25)
     #endregion
 
-
 # Restarts the Whole Window 
 # only works if program file ends in .pyw
 # That's why play again will only work on final program
 def restart():
+    print(__file__)
     root.destroy()
-    os.startfile(".pyw")
+    os.startfile(__file__)
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
