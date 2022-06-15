@@ -1,15 +1,13 @@
-# Add a win screen
-# Allow the game to finish no matter how rare
-
-# V2 - Unrelated to the win screen but configure the restart function so that it automatically takes the filename
+# Add in a settings frame
+# Allows user to configure audio volume and toggle fullscreen
 
 from tkinter import *
 import tkinter.font
-from turtle import screensize
 from PIL import Image, ImageTk, ImageFilter
 import os
 import random
 import re
+import pygame
 
 # Game Over screen
 def game_over(win_or_loss):
@@ -60,6 +58,10 @@ def game_over(win_or_loss):
     quit_button.grid(row=2, column=2)
     #endregion
 
+    for widget in stats_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
 # Actual Game
 def setup_game(difficulty):
     global lives
@@ -69,7 +71,8 @@ def setup_game(difficulty):
         global question_num
         
         for i in buttons:
-            i.config(state=NORMAL)
+            i.config(state=NORMAL, fg="black")
+            setup_button(i, "bind")
 
         question_num = question_num + 1
         question_num_label.config(text="Question {}".format(question_num))
@@ -130,6 +133,7 @@ def setup_game(difficulty):
 
         for i in buttons:
             i.config(state=DISABLED)
+            setup_button(i, "unbind")
     
         # Checks if user got question right or wrong
         if chosen_button == correct_button:
@@ -156,15 +160,13 @@ def setup_game(difficulty):
     # Use CSV to make a list
     with open('pokemon.csv') as file:
         content = file.readlines()
-
-    # Make lists smaller for testing purposes
-    pokemon_list = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
-    possible_questions = ["bulbasaur", "charmander", "squirtle", "charizard", "venusaur", "blastoise"]
     
-    # pokemon_list = []
-    # # Strip unwanted characters from data
-    # for i in content:
-    #     pokemon_list.append(i.strip())
+    pokemon_list = []
+    possible_questions = []
+    # Strip unwanted characters from data
+    for i in content:
+        pokemon_list.append(i.strip())
+        possible_questions.append(i.strip())
 
     # Difficulty condition (set lives to 1)
     if difficulty == "master":
@@ -184,16 +186,16 @@ def setup_game(difficulty):
     answer_button_frame = Frame(quiz_frame, bg="white")
     answer_button_frame.grid(row=1, column=1, padx=40)
 
-    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_a_button = Button(answer_button_frame, text="A", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_a_button.grid(row=0, column=0, pady=20, padx=20)
 
-    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_b_button = Button(answer_button_frame, text="B", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_b_button.grid(row=0, column=1, pady=20, padx=20)
 
-    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_c_button = Button(answer_button_frame, text="C", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_c_button.grid(row=1, column=0, pady=20, padx=20)
 
-    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5)
+    answer_d_button = Button(answer_button_frame, text="D", font=Karmatic_Arcade_button, width=20, height=5, disabledforeground="black", relief="solid", borderwidth=3)
     answer_d_button.grid(row=1, column=1, pady=20, padx=20)
 
     continue_button = Button(quiz_frame, text="Continue", font=Karmatic_Arcade_button, width=20, height=2)
@@ -202,6 +204,16 @@ def setup_game(difficulty):
     quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=lambda: game_over("loss"))
     quit_button.grid(row=2, column=0)
     #endregion
+
+    for widget in answer_button_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+    for widget in quiz_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+
 
     # Set up a list of buttons for later use
     buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
@@ -306,6 +318,10 @@ def export():
     
     #endregion
 
+    for widget in export_button_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
 # Help Screen
 def help_game():
     for widgets in help_frame.winfo_children():
@@ -330,12 +346,40 @@ def help_game():
     back_button.grid(row=4, pady=25)
     #endregion
 
+    for widget in help_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+# Settings Screen
+def settings():
+    for widgets in settings_frame.winfo_children():
+      widgets.destroy()
+
+    raise_frame(settings_frame)
+
+    #region Settings Frame
+    settings_picture = Label(settings_frame, image=settings_icon, bg="white", width=root.winfo_screenwidth())
+    settings_picture.image=settings_icon
+    settings_picture.grid(row=0)
+
+    settings_widget_frame = Frame(settings_frame, bg="white")
+    settings_widget_frame.grid(row=1)
+
+    var = DoubleVar()
+    volume_slider = Scale(settings_widget_frame, variable=var, length=100)
+    volume_slider.grid(row=0, column=0, padx=20)
+
+    fullscreen_button = Button(settings_widget_frame, text="Fullscreen", font=Karmatic_Arcade_button, width=10, command=fullscreen)
+    fullscreen_button.grid(row=0, column=1, padx=20)
+
+    back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
+    back_button.grid(row=2, pady=25)
 
 # Restarts the Whole Window 
 # only works if program file ends in .pyw
 # That's why play again will only work on final program
-# __file__ gives name of file so names of files doesn't need to be manually replaced all the time
 def restart():
+    print(__file__)
     root.destroy()
     os.startfile(__file__)
 # Bring frame to the top
@@ -345,8 +389,34 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
+def fullscreen():
+    if root.attributes("-fullscreen") == True:
+        root.attributes("-fullscreen", False)
+    else:
+        root.attributes("-fullscreen", True)
+
+def setup_button(button_name, bind_unbind):
+    if bind_unbind == "unbind":
+        button_name.unbind('<Enter>')
+        button_name.unbind('<Leave>')
+    else:
+        button_name.bind('<Enter>', on_enter)
+        button_name.bind('<Leave>', on_leave)
+
+    button_name.bind('<Button-1>', click)
+
+def on_enter(e):
+    e.widget.config(background="snow4", foreground= "white")
+
+def on_leave(e):
+    e.widget.config(background="SystemButtonFace", foreground="black")
+
+def click(e):
+    pygame.mixer.Sound.play(click_sound)
+
 
 root = Tk()
+pygame.init()
 
 #region Variables
 # Setup my karmatic arcade font
@@ -363,15 +433,23 @@ question_num = 0
 correct_list = []
 incorrect_list = []
 
-# Set up images
+# Set up files
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
+settings_icon = PhotoImage(file="settings_icon.png")
+background_song = "pokemon_battle_music.mp3"
+click_sound = pygame.mixer.Sound("game_click.wav")
+click_sound.set_volume(0.5)
 #endregion
 
+# Plays the music
+pygame.mixer.music.load(background_song)
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 # Setup Frames
 heading_frame = Frame(bg="white")
@@ -402,6 +480,10 @@ export_frame = Frame(bg="white")
 export_frame.grid(row=1, column=0, sticky="news")
 export_frame.place(anchor="c", relx=.5, rely=0.6)
 
+settings_frame = Frame(bg="white")
+settings_frame.grid(row=1, column=0, sticky="news")
+settings_frame.place(anchor="c", relx=.5, rely=0.6)
+
 raise_frame(heading_frame)
 raise_frame(starting_frame)
 
@@ -423,8 +505,11 @@ help_button.grid(row=0, column=0, padx=10)
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, height=2, command=lambda:raise_frame(difficulty_frame))
 play_button.grid(row=0, column=1, padx=10)
 
+settings_button = Button(starting_button_frame, text="Options", font=Karmatic_Arcade_button, width=10, height=2, command=settings)
+settings_button.grid(row=0, column=2, padx=10)
+
 quit_button = Button(starting_button_frame, text="Quit", font=Karmatic_Arcade_button, width=10, height=2, command=quit_game)
-quit_button.grid(row=0, column=2, padx=10)
+quit_button.grid(row=0, column=3, padx=10)
 #endregion
 
 #region Difficulty Frame
@@ -448,9 +533,17 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 
 # main routine
+for widget in starting_button_frame.winfo_children():
+    if isinstance(widget, tkinter.Button):
+        setup_button(widget, "bind")
+
+for widget in difficulty_button_frame.winfo_children():
+    if isinstance(widget, tkinter.Button):
+        setup_button(widget, "bind")
+
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
 # Makes game fullscreen
-# root.state('zoomed')
+root.state('zoomed')
 root.mainloop()

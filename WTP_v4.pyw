@@ -65,7 +65,6 @@ def game_over(win_or_loss):
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
 
-
 # Actual Game
 def setup_game(difficulty):
     global lives
@@ -376,14 +375,20 @@ def setup_button(button_name, bind_unbind):
         button_name.bind('<Enter>', on_enter)
         button_name.bind('<Leave>', on_leave)
 
+    button_name.bind('<Button-1>', click)
+
 def on_enter(e):
     e.widget.config(background="snow4", foreground= "white")
 
 def on_leave(e):
     e.widget.config(background="SystemButtonFace", foreground="black")
 
+def click(e):
+    pygame.mixer.Sound.play(click_sound)
+
 
 root = Tk()
+pygame.init()
 
 #region Variables
 # Setup my karmatic arcade font
@@ -408,11 +413,14 @@ sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
 background_song = "pokemon_battle_music.mp3"
+click_sound = pygame.mixer.Sound("game_click.wav")
+click_sound.set_volume(0.5)
 #endregion
 
-pygame.init()
+# Plays the music
 pygame.mixer.music.load(background_song)
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.5)
 
 # Setup Frames
 heading_frame = Frame(bg="white")
