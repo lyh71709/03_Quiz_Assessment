@@ -1,6 +1,7 @@
 # Final Program
 # V1 - Make game restart functional as well as add help instructions
 # V2 - Add in win frame
+# V3 - Add in sounds and music
 
 from tkinter import *
 import tkinter.font
@@ -8,6 +9,7 @@ from PIL import Image, ImageTk, ImageFilter
 import os
 import random
 import re
+import pygame
 
 
 # Game Over screen
@@ -359,15 +361,19 @@ question_num = 0
 correct_list = []
 incorrect_list = []
 
-# Set up images
+# Set up files
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
+background_song = "pokemon_battle_music.mp3"
 #endregion
 
+pygame.init()
+pygame.mixer.music.load(background_song)
+pygame.mixer.music.play(-1)
 
 # Setup Frames
 heading_frame = Frame(bg="white")

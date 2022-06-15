@@ -1,6 +1,8 @@
 # Final Program
 # V1 - Make game restart functional as well as add help instructions
 # V2 - Add in win frame
+# V3 - Add in sounds and music
+# V4 - Button Hover and click sound
 
 from tkinter import *
 import tkinter.font
@@ -8,7 +10,7 @@ from PIL import Image, ImageTk, ImageFilter
 import os
 import random
 import re
-
+import pygame
 
 # Game Over screen
 def game_over(win_or_loss):
@@ -59,6 +61,11 @@ def game_over(win_or_loss):
     quit_button.grid(row=2, column=2)
     #endregion
 
+    for widget in stats_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+
 # Actual Game
 def setup_game(difficulty):
     global lives
@@ -68,7 +75,8 @@ def setup_game(difficulty):
         global question_num
         
         for i in buttons:
-            i.config(state=NORMAL)
+            i.config(state=NORMAL, fg="black")
+            setup_button(i, "bind")
 
         question_num = question_num + 1
         question_num_label.config(text="Question {}".format(question_num))
@@ -129,6 +137,7 @@ def setup_game(difficulty):
 
         for i in buttons:
             i.config(state=DISABLED)
+            setup_button(i, "unbind")
     
         # Checks if user got question right or wrong
         if chosen_button == correct_button:
@@ -199,6 +208,16 @@ def setup_game(difficulty):
     quit_button = Button(quiz_frame, text="Leave Game", font=Karmatic_Arcade_button, width=20, height=2, command=lambda: game_over("loss"))
     quit_button.grid(row=2, column=0)
     #endregion
+
+    for widget in answer_button_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+    for widget in quiz_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
+
 
     # Set up a list of buttons for later use
     buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
@@ -303,6 +322,10 @@ def export():
     
     #endregion
 
+    for widget in export_button_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
 # Help Screen
 def help_game():
     for widgets in help_frame.winfo_children():
@@ -327,6 +350,10 @@ def help_game():
     back_button.grid(row=4, pady=25)
     #endregion
 
+    for widget in help_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
 # Restarts the Whole Window 
 # only works if program file ends in .pyw
 # That's why play again will only work on final program
@@ -340,6 +367,20 @@ def raise_frame(frame):
 # Exit Game
 def quit_game():
         root.destroy()
+
+def setup_button(button_name, bind_unbind):
+    if bind_unbind == "unbind":
+        button_name.unbind('<Enter>')
+        button_name.unbind('<Leave>')
+    else:
+        button_name.bind('<Enter>', on_enter)
+        button_name.bind('<Leave>', on_leave)
+
+def on_enter(e):
+    e.widget.config(background="snow4", foreground= "white")
+
+def on_leave(e):
+    e.widget.config(background="SystemButtonFace", foreground="black")
 
 
 root = Tk()
@@ -359,15 +400,19 @@ question_num = 0
 correct_list = []
 incorrect_list = []
 
-# Set up images
+# Set up files
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
 master_icon = PhotoImage(file="masterball.gif")
 sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
+background_song = "pokemon_battle_music.mp3"
 #endregion
 
+pygame.init()
+pygame.mixer.music.load(background_song)
+pygame.mixer.music.play(-1)
 
 # Setup Frames
 heading_frame = Frame(bg="white")
@@ -444,9 +489,17 @@ master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 
 # main routine
+for widget in starting_button_frame.winfo_children():
+    if isinstance(widget, tkinter.Button):
+        setup_button(widget, "bind")
+
+for widget in difficulty_button_frame.winfo_children():
+    if isinstance(widget, tkinter.Button):
+        setup_button(widget, "bind")
+
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
 # Makes game fullscreen
-# root.state('zoomed')
+root.state('zoomed')
 root.mainloop()
