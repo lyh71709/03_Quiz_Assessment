@@ -358,33 +358,51 @@ def settings():
     raise_frame(settings_frame)
 
     #region Settings Frame
+
+    settings_label = Label(settings_frame, text="Settings", bg="white", font=Karmatic_Arcade_subheading, fg="gray")
+    settings_label.grid(row=0, pady=10)
+
     settings_picture = Label(settings_frame, image=settings_icon, bg="white", width=root.winfo_screenwidth())
     settings_picture.image=settings_icon
-    settings_picture.grid(row=0)
+    settings_picture.grid(row=1, pady=15)
 
     settings_widget_frame = Frame(settings_frame, bg="white")
-    settings_widget_frame.grid(row=1)
+    settings_widget_frame.grid(row=2)
+    
+    music_volume_slider = Scale(settings_widget_frame, variable=var, from_=0, to=100, length=150, label="Volume", font=Karmatic_Arcade_small_text, resolution=1, command=change_volume, bg="white")
+    music_volume_slider.grid(row=0, column=0, padx=40)
+    music_volume_slider.set(var.get())
 
-    var = DoubleVar()
-    volume_slider = Scale(settings_widget_frame, variable=var, length=100)
-    volume_slider.grid(row=0, column=0, padx=20)
+    music_volume_label = Label(settings_widget_frame, text="Volume - 50%", font=Karmatic_Arcade_button, bg="white")
+    music_volume_label.grid(row=1, column=0, pady=15)
 
-    fullscreen_button = Button(settings_widget_frame, text="Fullscreen", font=Karmatic_Arcade_button, width=10, command=fullscreen)
-    fullscreen_button.grid(row=0, column=1, padx=20)
+    change_song_button = Button(settings_widget_frame, text="Change Song", font=Karmatic_Arcade_button, width=15, height=3, command=fullscreen)
+    change_song_button.grid(row=0, column=1, padx=40)
+
+    song_label = Label(settings_widget_frame, text="Song - Pokemon Theme", font=Karmatic_Arcade_button, bg="white")
+    song_label.grid(row=1, column=1)
+
+    fullscreen_button = Button(settings_widget_frame, text="Fullscreen", font=Karmatic_Arcade_button, width=15, height=3, command=fullscreen)
+    fullscreen_button.grid(row=0, column=2, padx=40)
+
+    fullscreen_label = Label(settings_widget_frame, text="Fullscreen - Off", font=Karmatic_Arcade_button, bg="white")
+    fullscreen_label.grid(row=1, column=2)
 
     back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
-    back_button.grid(row=2, pady=25)
+    back_button.grid(row=3, pady=25)
 
 # Restarts the Whole Window 
-# only works if program file ends in .pyw
+# only works properly if program file ends in .pyw
 # That's why play again will only work on final program
 def restart():
     print(__file__)
     root.destroy()
     os.startfile(__file__)
+
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()
+
 # Exit Game
 def quit_game():
         root.destroy()
@@ -414,6 +432,10 @@ def on_leave(e):
 def click(e):
     pygame.mixer.Sound.play(click_sound)
 
+def change_volume(e):
+    pygame.mixer.music.set_volume(var.get()/100)
+    click_sound.set_volume(var.get()/100)
+
 
 root = Tk()
 pygame.init()
@@ -433,6 +455,7 @@ question_num = 0
 correct_list = []
 incorrect_list = []
 
+
 # Set up files
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
 normal_icon = PhotoImage(file="pokeball.gif")
@@ -441,13 +464,18 @@ sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
 settings_icon = PhotoImage(file="settings_icon.png")
-background_song = "pokemon_battle_music.mp3"
+song_1 = "pokemon_battle_music.mp3"
+song_2 = "lavender_town_music.mp3"
+song_3 = "pokemon_theme_music.mp3"
 click_sound = pygame.mixer.Sound("game_click.wav")
 click_sound.set_volume(0.5)
+var = DoubleVar()
+var.set(50)
+
 #endregion
 
 # Plays the music
-pygame.mixer.music.load(background_song)
+pygame.mixer.music.load(song_3)
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
 
