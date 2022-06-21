@@ -1,5 +1,6 @@
 # Add in a settings frame
 # Allows user to configure audio volume and toggle fullscreen
+# Allow user to change song
 
 from tkinter import *
 import tkinter.font
@@ -273,7 +274,7 @@ def export():
                 f.write(item + "\n")
 
             # Writes the correct list
-            f.write("Pokemon You Got WRONG!\n\n")
+            f.write("\nPokemon You Got WRONG!\n\n")
             # Add new line at the end of each item
             for item in incorrect_list:
                 f.write(item + "\n")
@@ -352,6 +353,43 @@ def help_game():
 
 # Settings Screen
 def settings():
+    # Change the volume on the whole program
+    def change_volume(e):
+        pygame.mixer.music.set_volume(var.get()/100)
+        click_sound.set_volume(var.get()/100)
+        music_volume_label.config(text="Volume - {}%".format(var.get()), fg="gray")
+
+    # Cycles through the 3 available songs
+    def change_song():
+        global song_num
+
+        # Cycles through the songs
+        song_num -= 1
+        if song_num == 3:
+            pygame.mixer.music.load(song_3)
+            song_label.config(text="Song - Pokemon Main Theme", fg="red")
+        elif song_num == 2:
+            pygame.mixer.music.load(song_2)
+            song_label.config(text="Song - Lavender Town Theme", fg="green")
+        elif song_num == 1:
+            pygame.mixer.music.load(song_1)
+            song_label.config(text="Song - Pokemon Battle Theme", fg="blue")
+        else:
+            pygame.mixer.music.load(song_3)
+            song_label.config(text="Song - Pokemon Main Theme", fg="red")
+            song_num += 3
+
+        pygame.mixer.music.play(-1)
+
+    # Toggles fullscreen for game
+    def fullscreen():
+        if root.attributes("-fullscreen") == True:
+            root.attributes("-fullscreen", False)
+            fullscreen_label.config(text="Fullscreen - Off", fg="red")
+        else:
+            root.attributes("-fullscreen", True)
+            fullscreen_label.config(text="Fullscreen - On", fg="green")
+
     for widgets in settings_frame.winfo_children():
       widgets.destroy()
 
@@ -369,24 +407,36 @@ def settings():
     settings_widget_frame = Frame(settings_frame, bg="white")
     settings_widget_frame.grid(row=2)
     
-    music_volume_slider = Scale(settings_widget_frame, variable=var, from_=0, to=100, length=150, label="Volume", font=Karmatic_Arcade_small_text, resolution=1, command=change_volume, bg="white")
-    music_volume_slider.grid(row=0, column=0, padx=40)
+    music_volume_slider = Scale(settings_widget_frame, variable=var, from_=0, to=100, length=150, label="Volume", font=Karmatic_Arcade_small_text, resolution=1, command=change_volume, bg="white", orient=VERTICAL)
+    music_volume_slider.grid(row=0, column=0, padx=60)
     music_volume_slider.set(var.get())
 
-    music_volume_label = Label(settings_widget_frame, text="Volume - 50%", font=Karmatic_Arcade_button, bg="white")
+    music_volume_label = Label(settings_widget_frame, text="Volume - 50%", font=Karmatic_Arcade_button, bg="white", fg="gray")
     music_volume_label.grid(row=1, column=0, pady=15)
 
-    change_song_button = Button(settings_widget_frame, text="Change Song", font=Karmatic_Arcade_button, width=15, height=3, command=fullscreen)
-    change_song_button.grid(row=0, column=1, padx=40)
+    change_song_button = Button(settings_widget_frame, text="Change Song", font=Karmatic_Arcade_button, width=15, height=3, command=change_song)
+    change_song_button.grid(row=0, column=1, padx=60)
 
-    song_label = Label(settings_widget_frame, text="Song - Pokemon Theme", font=Karmatic_Arcade_button, bg="white")
+    song_label = Label(settings_widget_frame, text="", font=Karmatic_Arcade_button, bg="white", fg="red")
     song_label.grid(row=1, column=1)
+    # Configs appropriately when reopening the settings frame
+    if song_num == 2:
+        song_label.config(text="Song - Lavender Town Theme", fg="green")
+    elif song_num == 1:
+        song_label.config(text="Song - Pokemon Battle Theme", fg="blue")
+    else:
+        song_label.config(text="Song - Pokemon Main Theme", fg="red")
 
     fullscreen_button = Button(settings_widget_frame, text="Fullscreen", font=Karmatic_Arcade_button, width=15, height=3, command=fullscreen)
-    fullscreen_button.grid(row=0, column=2, padx=40)
+    fullscreen_button.grid(row=0, column=2, padx=60)
 
-    fullscreen_label = Label(settings_widget_frame, text="Fullscreen - Off", font=Karmatic_Arcade_button, bg="white")
+    fullscreen_label = Label(settings_widget_frame, text="", font=Karmatic_Arcade_button, bg="white", fg="red")
     fullscreen_label.grid(row=1, column=2)
+    # Configs appropriately when reopening the settings frame
+    if root.attributes("-fullscreen") == True:
+        fullscreen_label.config(text="Fullscreen - On", fg="green")
+    else:
+        fullscreen_label.config(text="Fullscreen - Off", fg="red")
 
     back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=3, pady=25)
@@ -407,12 +457,6 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
-def fullscreen():
-    if root.attributes("-fullscreen") == True:
-        root.attributes("-fullscreen", False)
-    else:
-        root.attributes("-fullscreen", True)
-
 def setup_button(button_name, bind_unbind):
     if bind_unbind == "unbind":
         button_name.unbind('<Enter>')
@@ -432,11 +476,6 @@ def on_leave(e):
 def click(e):
     pygame.mixer.Sound.play(click_sound)
 
-def change_volume(e):
-    pygame.mixer.music.set_volume(var.get()/100)
-    click_sound.set_volume(var.get()/100)
-
-
 root = Tk()
 pygame.init()
 
@@ -452,9 +491,9 @@ lives = 3
 score = 0
 question_num = 0
 
+
 correct_list = []
 incorrect_list = []
-
 
 # Set up files
 pokeball_icon = PhotoImage(file="pokeball_icon(resized).gif")
@@ -471,10 +510,10 @@ click_sound = pygame.mixer.Sound("game_click.wav")
 click_sound.set_volume(0.5)
 var = DoubleVar()
 var.set(50)
-
+song_num = 3
 #endregion
 
-# Plays the music
+# Plays the initial music
 pygame.mixer.music.load(song_3)
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(0.5)
