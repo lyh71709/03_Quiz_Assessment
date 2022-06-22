@@ -114,6 +114,7 @@ quiz_frame = Frame(bg="white")
 quiz_frame.grid(row=1, column=0, sticky="news")
 quiz_frame.place(anchor="c", relx=.5, rely=0.6)
 
+# Raises the inital frame
 raise_frame(heading_frame)
 raise_frame(starting_frame)
 

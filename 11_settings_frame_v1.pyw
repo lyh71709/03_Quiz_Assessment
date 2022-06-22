@@ -441,6 +441,10 @@ def settings():
     back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=3, pady=25)
 
+    for widget in settings_widget_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
+
 # Restarts the Whole Window 
 # only works properly if program file ends in .pyw
 # That's why play again will only work on final program
@@ -551,6 +555,7 @@ settings_frame = Frame(bg="white")
 settings_frame.grid(row=1, column=0, sticky="news")
 settings_frame.place(anchor="c", relx=.5, rely=0.6)
 
+# Raises the inital frame
 raise_frame(heading_frame)
 raise_frame(starting_frame)
 

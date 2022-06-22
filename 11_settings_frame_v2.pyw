@@ -2,6 +2,8 @@
 # Allows user to configure audio volume and toggle fullscreen
 # Allow user to change song
 
+# V2 - Make the settings button a small button in the top corner so that it is accessible anytime
+
 from tkinter import *
 import tkinter.font
 from PIL import Image, ImageTk, ImageFilter
@@ -25,7 +27,7 @@ def game_over(win_or_loss):
         gameover_label.config(text="Congratulations!", fg="blue")
 
     stats_frame = Label(gameover_frame, bg="white")
-    stats_frame.grid(row=1, pady=20)
+    stats_frame.grid(row=1, pady=15)
 
     correct_listbox_label = Label(stats_frame, text="   Pokemon you got    ", font=Karmatic_Arcade_big_text, fg="green", bg="white")
     correct_listbox_label.grid(row=0, column=0)
@@ -304,10 +306,10 @@ def export():
     export_error_label.grid(row=2, pady=15)
 
     export_entry = Entry(export_frame, font=Karmatic_Arcade_big_text, width=30, justify=CENTER, relief=GROOVE, borderwidth=4)
-    export_entry.grid(row=3, pady=25)
+    export_entry.grid(row=3, pady=20)
 
     export_button_frame = Frame(export_frame, bg="white")
-    export_button_frame.grid(row=4, pady=25)
+    export_button_frame.grid(row=4, pady=20)
 
     export_button = Button(export_button_frame, text="Export", font=Karmatic_Arcade_button, command=save_history)
     export_button.grid(row=0, column=0, padx=50)
@@ -352,7 +354,7 @@ def help_game():
             setup_button(widget, "bind")
 
 # Settings Screen
-def settings():
+def settings(from_frame):
     # Change the volume on the whole program
     def change_volume(e):
         pygame.mixer.music.set_volume(var.get()/100)
@@ -390,10 +392,16 @@ def settings():
             root.attributes("-fullscreen", True)
             fullscreen_label.config(text="Fullscreen - On", fg="green")
 
+    # Goes back to the frame it was on before and re enables button
+    def go_back():
+        raise_frame(from_frame)
+        settings_button.config(state=NORMAL)
+
     for widgets in settings_frame.winfo_children():
       widgets.destroy()
 
     raise_frame(settings_frame)
+    settings_button.config(state=DISABLED)
 
     #region Settings Frame
 
@@ -438,8 +446,13 @@ def settings():
     else:
         fullscreen_label.config(text="Fullscreen - Off", fg="red")
 
-    back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
+    back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=go_back)
     back_button.grid(row=3, pady=25)
+    setup_button(back_button, "bind")
+
+    for widget in settings_widget_frame.winfo_children():
+        if isinstance(widget, tkinter.Button):
+            setup_button(widget, "bind")
 
 # Restarts the Whole Window 
 # only works properly if program file ends in .pyw
@@ -451,7 +464,9 @@ def restart():
 
 # Bring frame to the top
 def raise_frame(frame):
+    global from_frame
     frame.tkraise()
+    from_frame = frame
 
 # Exit Game
 def quit_game():
@@ -502,8 +517,8 @@ master_icon = PhotoImage(file="masterball.gif")
 sad_pikachu = PhotoImage(file="sad_pikachu.gif")
 surprised_pikachu = PhotoImage(file="surprised_pikachu.gif")
 happy_pikachu = PhotoImage(file="happy_pikachu.gif")
-settings_icon = Image.open("settings_icon.png")
-settings_button_icon = settings_icon.resize((50, 50))
+settings_icon = PhotoImage(file="settings_icon.png")
+settings_button_icon = PhotoImage(file="settings_button_icon.png")
 song_1 = "pokemon_battle_music.mp3"
 song_2 = "lavender_town_music.mp3"
 song_3 = "pokemon_theme_music.mp3"
@@ -512,6 +527,7 @@ click_sound.set_volume(0.5)
 var = DoubleVar()
 var.set(50)
 song_num = 3
+from_frame = ""
 #endregion
 
 # Plays the initial music
@@ -552,6 +568,7 @@ settings_frame = Frame(bg="white")
 settings_frame.grid(row=1, column=0, sticky="news")
 settings_frame.place(anchor="c", relx=.5, rely=0.6)
 
+# Raises the inital frame
 raise_frame(heading_frame)
 raise_frame(starting_frame)
 
@@ -559,7 +576,7 @@ raise_frame(starting_frame)
 heading_label = Label(heading_frame, font=Karmatic_Arcade_heading, text="Who's That Pokemon?", background="white", justify=CENTER)
 heading_label.grid(row=0)
 
-settings_button = Label(root, image=settings_button_icon, background="red")
+settings_button = Button(root, image=settings_button_icon, bg="white", command= lambda: settings(from_frame))
 settings_button.image = settings_button_icon
 settings_button.place(x=10, y=10)
 #endregion
@@ -577,15 +594,12 @@ help_button.grid(row=0, column=0, padx=10)
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, height=2, command=lambda:raise_frame(difficulty_frame))
 play_button.grid(row=0, column=1, padx=10)
 
-settings_button = Button(starting_button_frame, text="Options", font=Karmatic_Arcade_button, width=10, height=2, command=settings)
-settings_button.grid(row=0, column=2, padx=10)
-
 quit_button = Button(starting_button_frame, text="Quit", font=Karmatic_Arcade_button, width=10, height=2, command=quit_game)
 quit_button.grid(row=0, column=3, padx=10)
 #endregion
 
 #region Difficulty Frame
-pokemon_logo = Label(difficulty_frame, font=Karmatic_Arcade_subheading, text="Select Your Difficulty", fg="blue",background="white")
+pokemon_logo = Label(difficulty_frame, font=Karmatic_Arcade_subheading, text="Select Your Difficulty", fg="blue",background="white", width=200)
 pokemon_logo.grid(row=0, pady=50)
 
 difficulty_button_frame = Frame(difficulty_frame, pady=50, background="white")
