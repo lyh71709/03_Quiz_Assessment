@@ -69,14 +69,14 @@ def setup_game(difficulty):
         for i in buttons:
             i.config(state=NORMAL)
 
-        question_num = question_num + 1
-        question_num_label.config(text="Question {}".format(question_num))
-
         # Checks if possible_questions is empty
         if not possible_questions:
             game_over("win")
-
+            
         else:
+            question_num = question_num + 1
+            question_num_label.config(text="Question {}".format(question_num))
+
             # Randomly select pokemon
             question = random.choice(possible_questions)
             # Finds the image of pokemon
@@ -336,7 +336,7 @@ def help_game():
 # That's why play again will only work on final program
 def restart():
     root.destroy()
-    os.startfile(".pyw")
+    os.startfile("10_win_frame_v1.pyw")
 # Bring frame to the top
 def raise_frame(frame):
     frame.tkraise()

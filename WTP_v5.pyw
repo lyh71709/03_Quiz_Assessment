@@ -21,6 +21,7 @@ def game_over(win_or_loss):
     #region Gameover Frame
     gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
     gameover_label.grid(row=0, column=0, pady=15)
+    # Checks if the player won or not
     if win_or_loss == "win":
         gameover_label.config(text="Congratulations!", fg="blue")
 
@@ -42,6 +43,7 @@ def game_over(win_or_loss):
 
     sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
     sad_pikachu_label.grid(row=1, column=1)
+    # Checks if the player won or not
     if win_or_loss == "win":
         sad_pikachu_label.config(image=happy_pikachu)
 
@@ -59,6 +61,7 @@ def game_over(win_or_loss):
     quit_button.grid(row=2, column=2)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in stats_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -79,14 +82,14 @@ def setup_game(difficulty):
             i.config(state=NORMAL, fg="black")
             setup_button(i, "bind")
 
-        question_num = question_num + 1
-        question_num_label.config(text="Question {}".format(question_num))
-
         # Checks if possible_questions is empty
         if not possible_questions:
             game_over("win")
 
         else:
+            question_num = question_num + 1
+            question_num_label.config(text="Question {}".format(question_num))
+
             # Randomly select pokemon
             question = random.choice(possible_questions)
             # Finds the image of pokemon
@@ -218,10 +221,12 @@ def setup_game(difficulty):
     quit_button.grid(row=2, column=0)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in answer_button_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
 
+    # Bind the button to make sounds and button hover
     for widget in quiz_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -332,6 +337,7 @@ def export():
     
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in export_button_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -361,6 +367,7 @@ def help_game():
     back_button.grid(row=4, pady=25)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in help_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -463,17 +470,10 @@ def settings(from_frame):
     back_button.grid(row=3, pady=25)
     setup_button(back_button, "bind")
 
+    # Bind the button to make sounds and button hover
     for widget in settings_widget_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
-
-# Restarts the Whole Window 
-# only works properly if program file ends in .pyw
-# That's why play again will only work on final program
-def restart():
-    print(__file__)
-    root.destroy()
-    os.startfile(__file__)
 
 # Bring frame to the top
 def raise_frame(frame):
@@ -485,6 +485,7 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
+# Sets up hover button and sound
 def setup_button(button_name, bind_unbind):
     if bind_unbind == "unbind":
         button_name.unbind('<Enter>')
@@ -495,15 +496,19 @@ def setup_button(button_name, bind_unbind):
 
     button_name.bind('<Button-1>', click)
 
+# When cursor enters button change colour
 def on_enter(e):
     e.widget.config(background="snow4", foreground= "white")
 
+# When cursor leaves button change colour
 def on_leave(e):
     e.widget.config(background="SystemButtonFace", foreground="black")
 
+# Make sound when button is clicked
 def click(e):
     pygame.mixer.Sound.play(click_sound)
 
+# Keeps the window from going down from a certain size
 def resize(e):
     if root.winfo_width() < 1240:
         root.geometry("1240x698")
@@ -514,7 +519,7 @@ root = Tk()
 pygame.init()
 
 #region Variables
-# Setup my karmatic arcade font
+# Setup my karmatic arcade fonts
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 35, weight = "bold")
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
@@ -550,7 +555,9 @@ from_frame = ""
 
 # Plays the initial music
 pygame.mixer.music.load(song_3)
+# Plays in a loop (-1)
 pygame.mixer.music.play(-1)
+# Initialises volume at 50%
 pygame.mixer.music.set_volume(0.5)
 
 # Ensures that the window size cannot go below a certain threshold
@@ -640,15 +647,17 @@ master_button = Button(difficulty_button_frame, image=master_icon, command=lambd
 master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 
-# main routine
+# Bind the button to make sounds and button hover
 for widget in starting_button_frame.winfo_children():
     if isinstance(widget, tkinter.Button):
         setup_button(widget, "bind")
 
+# Bind the button to make sounds and button hover
 for widget in difficulty_button_frame.winfo_children():
     if isinstance(widget, tkinter.Button):
         setup_button(widget, "bind")
 
+# main routine
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")

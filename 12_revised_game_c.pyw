@@ -58,6 +58,7 @@ def game_over(win_or_loss):
     quit_button.grid(row=2, column=2)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in stats_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -74,14 +75,14 @@ def setup_game(difficulty):
             i.config(state=NORMAL, fg="black")
             setup_button(i, "bind")
 
-        question_num = question_num + 1
-        question_num_label.config(text="Question {}".format(question_num))
-
         # Checks if possible_questions is empty
         if not possible_questions:
             game_over("win")
 
         else:
+            question_num = question_num + 1
+            question_num_label.config(text="Question {}".format(question_num))
+
             # Randomly select pokemon
             question = random.choice(possible_questions)
             # Finds the image of pokemon
@@ -217,10 +218,12 @@ def setup_game(difficulty):
     quit_button.grid(row=2, column=0)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in answer_button_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
 
+    # Bind the button to make sounds and button hover
     for widget in quiz_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -331,6 +334,7 @@ def export():
     
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in export_button_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -360,6 +364,7 @@ def help_game():
     back_button.grid(row=4, pady=25)
     #endregion
 
+    # Bind the button to make sounds and button hover
     for widget in help_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -462,6 +467,9 @@ def settings(from_frame):
     back_button.grid(row=3, pady=25)
     setup_button(back_button, "bind")
 
+    #endregion
+
+    # Bind the button to make sounds and button hover
     for widget in settings_widget_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
@@ -639,15 +647,17 @@ master_button = Button(difficulty_button_frame, image=master_icon, command=lambd
 master_button.grid(row=1, column=1, padx=25, pady=5)
 #endregion
 
-# main routine
+# Bind the button to make sounds and button hover
 for widget in starting_button_frame.winfo_children():
     if isinstance(widget, tkinter.Button):
         setup_button(widget, "bind")
 
+# Bind the button to make sounds and button hover
 for widget in difficulty_button_frame.winfo_children():
     if isinstance(widget, tkinter.Button):
         setup_button(widget, "bind")
 
+# main routine
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")

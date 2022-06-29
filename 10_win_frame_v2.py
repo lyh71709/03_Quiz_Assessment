@@ -70,14 +70,14 @@ def setup_game(difficulty):
         for i in buttons:
             i.config(state=NORMAL)
 
-        question_num = question_num + 1
-        question_num_label.config(text="Question {}".format(question_num))
-
         # Checks if possible_questions is empty
         if not possible_questions:
             game_over("win")
-
+            
         else:
+            question_num = question_num + 1
+            question_num_label.config(text="Question {}".format(question_num))
+
             # Randomly select pokemon
             question = random.choice(possible_questions)
             # Finds the image of pokemon
@@ -122,7 +122,7 @@ def setup_game(difficulty):
             answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
             answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
             answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
-
+   
     # When user answers question
     def answer_question(chosen_button, correct_button):
         global lives, score
