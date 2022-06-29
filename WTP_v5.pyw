@@ -1,10 +1,13 @@
-# Make it so that the window cannot be resized to a size smaller than the appropriate size (1240x698)
-# Make play again not restart the whole program but just restart the game setup
+# Final Program
+# V1 - Make game restart functional as well as add help instructions
+# V2 - Add in win frame
+# V3 - Add in sounds and music
+# V4 - Button Hover, click sound and win frame
+# V5 - Add in the settings
 
 from tkinter import *
 import tkinter.font
 from PIL import Image, ImageTk, ImageFilter
-import os
 import random
 import re
 import pygame

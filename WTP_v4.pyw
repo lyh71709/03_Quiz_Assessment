@@ -2,7 +2,7 @@
 # V1 - Make game restart functional as well as add help instructions
 # V2 - Add in win frame
 # V3 - Add in sounds and music
-# V4 - Button Hover and click sound
+# V4 - Button Hover, click sound and win frame
 
 from tkinter import *
 import tkinter.font

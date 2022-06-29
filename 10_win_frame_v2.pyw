@@ -1,6 +1,6 @@
 # Add a win screen
 # Allow the game to finish no matter how rare
-# V2 - Unrelated to the win screen but configure the restart function so that it automatically takes the filename
+# V2 - Fix the question num error
 
 from tkinter import *
 import tkinter.font
@@ -122,7 +122,7 @@ def setup_game(difficulty):
             answer_b_button.config(command= lambda: answer_question(answer_b_button, answer_button))
             answer_c_button.config(command= lambda: answer_question(answer_c_button, answer_button))
             answer_d_button.config(command= lambda: answer_question(answer_d_button, answer_button))
-   
+
     # When user answers question
     def answer_question(chosen_button, correct_button):
         global lives, score
@@ -335,7 +335,6 @@ def help_game():
 # Restarts the Whole Window 
 # only works if program file ends in .pyw
 # That's why play again will only work on final program
-# __file__ gives name of file so names of files doesn't need to be manually replaced all the time
 def restart():
     root.destroy()
     os.startfile(__file__)
