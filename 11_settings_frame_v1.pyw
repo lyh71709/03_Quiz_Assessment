@@ -1,6 +1,7 @@
 # Add in a settings frame
 # Allows user to configure audio volume and toggle fullscreen
 # Allow user to change song
+# Add button hover and button click sound
 
 from tkinter import *
 import tkinter.font
@@ -12,7 +13,7 @@ import pygame
 
 # Game Over screen
 def game_over(win_or_loss):
-
+    # Removes any pre exising widgets
     for widgets in gameover_frame.winfo_children():
         widgets.destroy()
 
@@ -325,6 +326,7 @@ def export():
 
 # Help Screen
 def help_game():
+    # Removes any pre exising widgets
     for widgets in help_frame.winfo_children():
       widgets.destroy()
 
@@ -390,6 +392,7 @@ def settings():
             root.attributes("-fullscreen", True)
             fullscreen_label.config(text="Fullscreen - On", fg="green")
 
+    # Removes any pre exising widgets
     for widgets in settings_frame.winfo_children():
       widgets.destroy()
 

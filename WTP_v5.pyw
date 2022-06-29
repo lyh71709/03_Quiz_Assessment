@@ -1,4 +1,5 @@
 # Make it so that the window cannot be resized to a size smaller than the appropriate size (1240x698)
+# Make play again not restart the whole program but just restart the game setup
 
 from tkinter import *
 import tkinter.font
@@ -11,6 +12,7 @@ import pygame
 # Game Over screen
 def game_over(win_or_loss):
 
+    # Removes any pre exising widgets
     for widgets in gameover_frame.winfo_children():
         widgets.destroy()
 
@@ -63,7 +65,11 @@ def game_over(win_or_loss):
 
 # Actual Game
 def setup_game(difficulty):
-    global lives
+    global lives, question_num, score, correct_list, incorrect_list
+
+    # Removes any pre exising widgets
+    for widgets in quiz_frame.winfo_children():
+        widgets.destroy()
 
     # Generate the question and alters the answers
     def generate_question():
@@ -162,6 +168,7 @@ def setup_game(difficulty):
     
     pokemon_list = []
     possible_questions = []
+
     # Strip unwanted characters from data
     for i in content:
         pokemon_list.append(i.strip())
@@ -169,6 +176,8 @@ def setup_game(difficulty):
 
     question_num = 0
     score = 0
+    correct_list = []
+    incorrect_list = []
 
     # Difficulty condition (set lives to 1)
     if difficulty == "master":
@@ -285,6 +294,7 @@ def export():
             # Give feedback for user
             export_error_label.config(text="History Exported Successfully", fg="green")
 
+    # Removes any pre exising widgets
     for widgets in export_frame.winfo_children():
       widgets.destroy()
 
@@ -328,6 +338,7 @@ def export():
 
 # Help Screen
 def help_game():
+    # Removes any pre exising widgets
     for widgets in help_frame.winfo_children():
       widgets.destroy()
 
@@ -340,11 +351,11 @@ def help_game():
     sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
     sub_heading_label.grid(row=1)
 
-    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_1_label.grid(row=2, pady=80)
+    help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.\n\nAt the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
+    help_1_label.grid(row=2, pady=15)
 
-    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
-    help_2_label.grid(row=3, pady=80)
+    help_2_label = Label(help_frame, text="The game uses a custom font named Karmatic Arcade but using Arial is fine as well. If you already have Karmatic Arcade then skip this paragraph. To install use link (https://www.dafont.com/karmatic-arcade.font) \n\nEnjoy and have fun!", font=Karmatic_Arcade_small_text, background="white",justify=CENTER, wrap=850)
+    help_2_label.grid(row=3, pady=15)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=4, pady=25)
@@ -398,6 +409,7 @@ def settings(from_frame):
         raise_frame(from_frame)
         settings_button.config(state=NORMAL)
 
+    # Removes any pre exising widgets
     for widgets in settings_frame.winfo_children():
       widgets.destroy()
 

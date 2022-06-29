@@ -14,7 +14,7 @@ import pygame
 
 # Game Over screen
 def game_over(win_or_loss):
-
+    # Removes any pre exising widgets
     for widgets in gameover_frame.winfo_children():
         widgets.destroy()
 
@@ -283,7 +283,8 @@ def export():
 
             # Give feedback for user
             export_error_label.config(text="History Exported Successfully", fg="green")
-
+    
+    # Removes any pre exising widgets
     for widgets in export_frame.winfo_children():
       widgets.destroy()
 
@@ -327,6 +328,7 @@ def export():
 
 # Help Screen
 def help_game():
+    # Removes any pre exising widgets
     for widgets in help_frame.winfo_children():
       widgets.destroy()
 
@@ -397,6 +399,7 @@ def settings(from_frame):
         raise_frame(from_frame)
         settings_button.config(state=NORMAL)
 
+    # Removes any pre exising widgets
     for widgets in settings_frame.winfo_children():
       widgets.destroy()
 
