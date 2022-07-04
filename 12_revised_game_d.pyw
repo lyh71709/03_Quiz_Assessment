@@ -1,20 +1,17 @@
-# Final Program
-# V1 - Make game restart functional as well as add help instructions
-# V2 - Add in win frame
-# V3 - Add in sounds and music
-# V4 - Button Hover, click sound and win frame
-# V5 - Add in the settings
+# Make it so that the window cannot be resized to a size smaller than the appropriate size (1240x698)
+# Make play again not restart the whole program but just restart the game setup
+# Bind Continue button to enter
 
 from tkinter import *
 import tkinter.font
 from PIL import Image, ImageTk, ImageFilter
+import os
 import random
 import re
 import pygame
 
 # Game Over screen
 def game_over(win_or_loss):
-
     # Removes any pre exising widgets
     for widgets in gameover_frame.winfo_children():
         widgets.destroy()
@@ -24,7 +21,6 @@ def game_over(win_or_loss):
     #region Gameover Frame
     gameover_label = Label(gameover_frame, text="Game Over", font=Karmatic_Arcade_subheading, bg="white", fg="red", width=100)
     gameover_label.grid(row=0, column=0, pady=15)
-    # Checks if the player won or not
     if win_or_loss == "win":
         gameover_label.config(text="Congratulations!", fg="blue")
 
@@ -46,7 +42,6 @@ def game_over(win_or_loss):
 
     sad_pikachu_label = Label(stats_frame, image=sad_pikachu, bg="black")
     sad_pikachu_label.grid(row=1, column=1)
-    # Checks if the player won or not
     if win_or_loss == "win":
         sad_pikachu_label.config(image=happy_pikachu)
 
@@ -72,10 +67,6 @@ def game_over(win_or_loss):
 # Actual Game
 def setup_game(difficulty):
     global lives, question_num, score, correct_list, incorrect_list
-
-    # Removes any pre exising widgets
-    for widgets in quiz_frame.winfo_children():
-        widgets.destroy()
 
     # Generate the question and alters the answers
     def generate_question():
@@ -165,9 +156,15 @@ def setup_game(difficulty):
             game_over("loss")
 
         # Makes continue button reappear
+        
         continue_button.grid(row=2, column=1)
         continue_button.config(command=generate_question)
+        
     
+    # Removes any pre exising widgets
+    for widgets in quiz_frame.winfo_children():
+        widgets.destroy()
+
     # Use CSV to make a list
     with open('pokemon.csv') as file:
         content = file.readlines()
@@ -360,11 +357,11 @@ def help_game():
     sub_heading_label = Label(help_frame, font=Karmatic_Arcade_subheading, text="Help", fg="red" ,background="white", justify=CENTER)
     sub_heading_label.grid(row=1)
 
-    help_1_label = Label(help_frame, text="Welcome to Who's that pokemon?, Based off of the segment that was part of the Pokemon anime. All you have to do is guess the name of the pokemon based off the picture provided. \n\nThere are two difficulties: Normal and Master. Normal is 3 lives with regular pictures, whereas Master is 1 life with blurred images, perfect for Pokemon Masters.\n\nAt the end, the game will display the pokemon you got right and the pokemon you got wrong. You will also be able to export your results to a text file.", font=Karmatic_Arcade_button, background="white",justify=CENTER, wrap=850)
-    help_1_label.grid(row=2, pady=15)
+    help_1_label = Label(help_frame, text="Paragraph 1", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_1_label.grid(row=2, pady=80)
 
-    help_2_label = Label(help_frame, text="The game uses a custom font named Karmatic Arcade but using Arial is fine as well. If you already have Karmatic Arcade then skip this paragraph. To install use link (https://www.dafont.com/karmatic-arcade.font) \n\nEnjoy and have fun!", font=Karmatic_Arcade_small_text, background="white",justify=CENTER, wrap=850)
-    help_2_label.grid(row=3, pady=15)
+    help_2_label = Label(help_frame, text="Paragraph 2", font=Karmatic_Arcade_big_text, background="white",justify=CENTER)
+    help_2_label.grid(row=3, pady=80)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
     back_button.grid(row=4, pady=25)
@@ -473,10 +470,20 @@ def settings(from_frame):
     back_button.grid(row=3, pady=25)
     setup_button(back_button, "bind")
 
+    #endregion
+
     # Bind the button to make sounds and button hover
     for widget in settings_widget_frame.winfo_children():
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
+
+# Restarts the Whole Window 
+# only works properly if program file ends in .pyw
+# That's why play again will only work on final program
+def restart():
+    print(__file__)
+    root.destroy()
+    os.startfile(__file__)
 
 # Bring frame to the top
 def raise_frame(frame):
@@ -488,7 +495,6 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
-# Sets up hover button and sound
 def setup_button(button_name, bind_unbind):
     if bind_unbind == "unbind":
         button_name.unbind('<Enter>')
@@ -499,19 +505,15 @@ def setup_button(button_name, bind_unbind):
 
     button_name.bind('<Button-1>', click)
 
-# When cursor enters button change colour
 def on_enter(e):
     e.widget.config(background="snow4", foreground= "white")
 
-# When cursor leaves button change colour
 def on_leave(e):
     e.widget.config(background="SystemButtonFace", foreground="black")
 
-# Make sound when button is clicked
 def click(e):
     pygame.mixer.Sound.play(click_sound)
 
-# Keeps the window from going down from a certain size
 def resize(e):
     if root.winfo_width() < 1240:
         root.geometry("1240x698")
@@ -522,7 +524,7 @@ root = Tk()
 pygame.init()
 
 #region Variables
-# Setup my karmatic arcade fonts
+# Setup my karmatic arcade font
 Karmatic_Arcade_heading = tkinter.font.Font(family = "Karmatic Arcade", size = 50, weight = "bold")
 Karmatic_Arcade_subheading = tkinter.font.Font(family = "Karmatic Arcade", size = 35, weight = "bold")
 Karmatic_Arcade_button = tkinter.font.Font(family = "Karmatic Arcade", size = 16, weight = "normal")
@@ -558,9 +560,7 @@ from_frame = ""
 
 # Plays the initial music
 pygame.mixer.music.load(song_3)
-# Plays in a loop (-1)
 pygame.mixer.music.play(-1)
-# Initialises volume at 50%
 pygame.mixer.music.set_volume(0.5)
 
 # Ensures that the window size cannot go below a certain threshold
@@ -625,6 +625,7 @@ help_button.grid(row=0, column=0, padx=10)
 
 play_button = Button(starting_button_frame, text="Play", font=Karmatic_Arcade_button, width=10, height=2, command=lambda:raise_frame(difficulty_frame))
 play_button.grid(row=0, column=1, padx=10)
+play_button.bind('<Return>', lambda:raise_frame(difficulty_frame))
 
 quit_button = Button(starting_button_frame, text="Quit", font=Karmatic_Arcade_button, width=10, height=2, command=quit_game)
 quit_button.grid(row=0, column=3, padx=10)
@@ -664,7 +665,6 @@ for widget in difficulty_button_frame.winfo_children():
 root.title("Who's That Pokemon?")
 root.geometry("1280x720")
 root.config(background="white")
-root.iconbitmap('pokeball_icon.ico')
 # Makes game fullscreen
 root.state('zoomed')
 root.mainloop()

@@ -471,6 +471,7 @@ def raise_frame(frame):
 def quit_game():
         root.destroy()
 
+# Gives buttons the hover button trait
 def setup_button(button_name, bind_unbind):
     if bind_unbind == "unbind":
         button_name.unbind('<Enter>')
@@ -481,12 +482,15 @@ def setup_button(button_name, bind_unbind):
 
     button_name.bind('<Button-1>', click)
 
+# Changes colour when cursor enters button
 def on_enter(e):
     e.widget.config(background="snow4", foreground= "white")
 
+# Changes colour when cursor leaves button
 def on_leave(e):
     e.widget.config(background="SystemButtonFace", foreground="black")
 
+# Gives button
 def click(e):
     pygame.mixer.Sound.play(click_sound)
 
