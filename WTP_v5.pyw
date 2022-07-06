@@ -367,7 +367,7 @@ def help_game():
     help_2_label.grid(row=3, pady=15)
 
     back_button = Button(help_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=lambda:raise_frame(starting_frame))
-    back_button.grid(row=4, pady=25)
+    back_button.grid(row=4, pady=32)
     #endregion
 
     # Bind the button to make sounds and button hover
@@ -470,7 +470,7 @@ def settings(from_frame):
         fullscreen_label.config(text="Fullscreen - Off", fg="red")
 
     back_button = Button(settings_frame, text="Close", font=Karmatic_Arcade_button, width=10, command=go_back)
-    back_button.grid(row=3, pady=25)
+    back_button.grid(row=3, pady=32)
     setup_button(back_button, "bind")
 
     # Bind the button to make sounds and button hover
