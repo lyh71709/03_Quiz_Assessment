@@ -81,6 +81,7 @@ def setup_game(difficulty):
     def generate_question():
         global question_num
         
+        # Returns all buttons back to their normal state
         for i in buttons:
             i.config(state=NORMAL, fg="black")
             setup_button(i, "bind")
@@ -142,6 +143,7 @@ def setup_game(difficulty):
     def answer_question(chosen_button, correct_button):
         global lives, score
 
+        # Disables all buttons
         for i in buttons:
             i.config(state=DISABLED)
             setup_button(i, "unbind")
@@ -159,6 +161,7 @@ def setup_game(difficulty):
             incorrect_list.append(correct_button.cget('text'))
             lives -= 1
 
+        # Updates the game stats
         game_stats_label.config(text="Lives - {}\nScore - {}".format(lives, score))
 
         if lives <= 0:
@@ -172,6 +175,7 @@ def setup_game(difficulty):
     with open('pokemon.csv') as file:
         content = file.readlines()
     
+    # Initialise Lists
     pokemon_list = []
     possible_questions = []
 
@@ -234,8 +238,6 @@ def setup_game(difficulty):
         if isinstance(widget, tkinter.Button):
             setup_button(widget, "bind")
 
-
-
     # Set up a list of buttons for later use
     buttons = [answer_a_button, answer_b_button, answer_c_button, answer_d_button]
     generate_question()
@@ -257,10 +259,10 @@ def export():
         for letter in filename:
             if re.match(valid_char, letter):
                 continue
-
+            # Blank Space error case
             elif letter == " ":
                 problem = "(No Spaces Allowed)"
-
+            # Invalid Character error case
             else:
                 problem = "(No {}'s Allowed)".format(letter)
             has_error = "yes"
