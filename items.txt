@@ -2,8 +2,15 @@ GAME HISTORY:
 
 Pokemon You Got RIGHT!
 
-Appletun
-Pansear
+Polteageist
+Magnezone
+Beldum
+Arbok
+Zubat
+Charmeleon
 
 Pokemon You Got WRONG!
 
+Frosmoth
+Medicham
+Golett
